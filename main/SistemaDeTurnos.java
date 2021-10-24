@@ -2,10 +2,13 @@ package main;
 
 import java.util.*;
 
+import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
+
 import main.Mesa.*;
 
 public class SistemaDeTurnos {
 	private String _nombre;
+	private int _CantTurnosAsignados;
 	private Map<Integer, Persona> padron; // Almacena las personas que estan en el padron, Integer dni, Persona p
 	private Set<Mesa> mesas; // Almacena las mesas
 	private Set<Integer> registroVotantes; // almacena los dni que ya votaron
@@ -49,6 +52,35 @@ public class SistemaDeTurnos {
 		 * return mesa.get_numeroMesa(); } if(tipoMesa.equals("Mayor65")) { Mesa mesa2 =
 		 * new MesaMayores(dni); return mesa2.get_numeroMesa(); }
 		 */
+	}
+	
+	public Tupla<Integer, Integer> asignarTurno(int dni){
+		if(padron.containsKey(dni)) {
+			for (Mesa mesa: mesas) {
+				if(padron.get(dni).get_EnfPreexistentes() && mesa instanceof MesaEnfPreexistentes) {
+					this._CantTurnosAsignados++;
+					return new Tupla<Integer, Integer>(mesa.get_numeroMesa(), 8);
+				}
+				if(padron.get(dni).get_trabaja() &&  mesa instanceof MesaTrabajadores) {
+					this._CantTurnosAsignados++;
+					return new Tupla<Integer, Integer>(mesa.get_numeroMesa(), 8);
+				}
+				if(padron.get(dni).get_Edad()>65 && mesa instanceof MesaMayores) {
+					this._CantTurnosAsignados++;
+					return new Tupla<Integer, Integer>(mesa.get_numeroMesa(), 8);
+				}else {
+					this._CantTurnosAsignados++;
+					return new Tupla<Integer, Integer>(mesa.get_numeroMesa(), 8);
+				}
+			}
+		}else {
+			throw new RuntimeException("Dni de votante no encontrado/registrado");
+		}
+		/* Asigna turnos automáticamente a los votantes sin turno.
+		* El sistema busca si hay alguna mesa y franja horaria factible en la que haya disponibilidad.
+		* Devuelve la cantidad de turnos que pudo asignar.
+		*/
+		return null;
 	}
 
 	public void asignarTurno() {
