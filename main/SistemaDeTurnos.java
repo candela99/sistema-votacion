@@ -16,15 +16,28 @@ public class SistemaDeTurnos {
 	
 	public void registrarVotante(Integer dni, String nombre, Integer edad, Boolean enfPrevia, Boolean trabaja) {
 	//se encarga de registrar las personas en el padron
-		Persona p = new Persona(dni, nombre, edad, enfPrevia, trabaja);
-		padron.put(dni, p);
+		if(edad < 16) {
+			throw new RuntimeException("Solo los mayores de 16 años pueden registrarse como votantes");
+		}
+		else { 
+			Persona p = new Persona(dni, nombre, edad, enfPrevia, trabaja);
+			padron.put(dni, p);
+		}
 	}
 
 	public Integer agregarMesa(String tipoMesa, Integer dni) {
 		//registra la mesa segun su tipo junto con el dni del presidente y devuelve el numero de mesa
-		Mesa mesa = new Mesa(tipoMesa, dni);
-		if(mesa instanceof Mesa) {
-			return mesa.get_numeroMesa();
+		if(!padron.containsKey(dni)) {
+			throw new RuntimeException("El presidente no se encuentra regitrado en el padron");
+		}
+		else {
+			Mesa mesa = new Mesa(tipoMesa, dni);
+			if(mesa instanceof MesaMayores || mesa instanceof MesaEnfPreexistentes || mesa instanceof MesaTrabajadores || mesa instanceof MesaGeneral) {
+				return mesa.get_numeroMesa();
+			}
+			else {
+				throw new RuntimeException("El tipo de mesa no es válido");
+			}
 		}
 		/*
 		if(tipoMesa.equals("Enf_Preex")) {
@@ -36,7 +49,6 @@ public class SistemaDeTurnos {
 			return mesa2.get_numeroMesa();
 		}
 		*/
-		return 0;
 	}
 
 	public void asignarTurno() {
