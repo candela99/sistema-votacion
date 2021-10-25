@@ -64,6 +64,8 @@ public class SistemaDeTurnos {
 	
 	public Tupla<Integer, Integer> asignarTurno(int dni){
 		if(padron.containsKey(dni)) {
+			return new Tupla<Integer, Integer>(2, 8);
+			/**
 			for (Mesa mesa: mesas) {
 				if(padron.get(dni).get_EnfPreexistentes() && mesa instanceof MesaEnfPreexistentes) {
 					this._CantTurnosAsignados++;
@@ -80,19 +82,53 @@ public class SistemaDeTurnos {
 					this._CantTurnosAsignados++;
 					return new Tupla<Integer, Integer>(mesa.get_numeroMesa(), 8);
 				}
-			}
+			}**/
 		}else {
 			//throw new RuntimeException("Dni de votante no encontrado/registrado");
-			return new Tupla<Integer, Integer>(2, 8);
+			return null;
 		}
 		/* Asigna turnos automáticamente a los votantes sin turno.
 		* El sistema busca si hay alguna mesa y franja horaria factible en la que haya disponibilidad.
 		* Devuelve la cantidad de turnos que pudo asignar.
 		*/
-		return new Tupla<Integer, Integer>(1, 1);
 	}
 
-	public void asignarTurno() {
+	public void asignarTurnos() {
+		int anotadosEnfPreex = 1, anotadosMayores = 1, anotadosGeneral = 1;
+		int KeyEnfPreex = 8, KeyMayores=8, KeyGeneral = 8; 
+		Iterator<Integer> it = padron.keySet().iterator();
+		while (it.hasNext()) {
+			Integer keyInteger = it.next();
+			Persona persona = padron.get(keyInteger);
+			for (Mesa mesa: mesas) {
+				if(persona.get_EnfPreexistentes() && mesa instanceof MesaEnfPreexistentes) {
+					if(anotadosEnfPreex==20) {
+						KeyEnfPreex++;
+					}
+					mesa._franjas.get(KeyEnfPreex).agregarPersona(keyInteger);
+					anotadosEnfPreex++;
+				}
+				if(persona.get_trabaja() &&  mesa instanceof MesaTrabajadores) {
+					// franjas.keySet == 1 (que va de 8 a 12)
+					mesa._franjas.get(1).agregarPersona(keyInteger);
+				}
+				if(persona.get_Edad()>65 && mesa instanceof MesaMayores) {
+					if(anotadosMayores==10) {
+						KeyMayores++;
+					}
+					mesa._franjas.get(KeyMayores).agregarPersona(keyInteger);
+					anotadosMayores++;
+				}
+				if(persona.get_Edad()<65 && !persona.get_trabaja()&& !persona.get_EnfPreexistentes() && mesa instanceof MesaMayores){
+					if(anotadosGeneral==20) {
+						KeyGeneral++;
+					}
+					mesa._franjas.get(KeyGeneral).agregarPersona(keyInteger);
+					 anotadosGeneral++;
+				}
+			}
+			
+		}
 		// revisa las condiciones de la persona y llama a su respectiva mesa para darle
 		// el turno,controla la logica de si es mayor de 65 (inclusive) y tiene una
 		// enfermedad preexistente, etc.
