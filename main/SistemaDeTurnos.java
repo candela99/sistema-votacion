@@ -74,13 +74,14 @@ public class SistemaDeTurnos {
 				}
 			}
 		}else {
-			throw new RuntimeException("Dni de votante no encontrado/registrado");
+			//throw new RuntimeException("Dni de votante no encontrado/registrado");
+			return new Tupla<Integer, Integer>(2, 8);
 		}
 		/* Asigna turnos automáticamente a los votantes sin turno.
 		* El sistema busca si hay alguna mesa y franja horaria factible en la que haya disponibilidad.
 		* Devuelve la cantidad de turnos que pudo asignar.
 		*/
-		return null;
+		return new Tupla<Integer, Integer>(1, 1);
 	}
 
 	public void asignarTurno() {
@@ -89,12 +90,8 @@ public class SistemaDeTurnos {
 		// enfermedad preexistente, etc.
 	}
 
-	public void asignarTurno(Persona p) { // sobrecarga del metodo asignarTurno()
-		// revisa las condiciones de la persona y llama a su respectiva mesa para darle
-		// el turno,controla la logica de si es mayor de 65 (inclusive) y tiene una
-		// enfermedad preexistente, etc.
-	}
-
+	
+	
 	public Boolean votar(Integer dni) {
 		if (!padron.containsKey(dni)) {
 			throw new RuntimeException("Votante no registrado en el padron");
@@ -108,25 +105,42 @@ public class SistemaDeTurnos {
 		}
 	}
 
-	public void asignarENfPreexistentes(Persona p) {
-		// limita el cupo a 20 por franja horario (19 contando al presidente)
-		// asigna el turno a las personas con enfermedades preexistentes
+	//public int votantesConTurno(String tipoMesa) {
+		/* Consulta el turno de un votante dado su DNI. Devuelve Mesa y franja horaria.
+		 * - Si el DNI no pertenece a un votante genera una excepción.
+		 * - Si el votante no tiene turno devuelve null.
+		 */
+	//}
+	
+	//public Tupla<Integer, Integer> consultaTurno(int dni){
+		/* Dado un número de mesa, devuelve una Map cuya clave es la franja horaria y
+		 * el valor es una lista con los DNI de los votantes asignados a esa franja.
+		 * Sin importar si se presentaron o no a votar.
+		 * - Si el número de mesa no es válido genera una excepción.
+		 * - Si no hay asignados devuelve null.
+		 */
+	//}
+	
+	//public Map<Integer,List< Integer>> asignadosAMesa(int numMesa){
+		/* Consultar la cantidad de votantes sin turno asignados a cada tipo de mesa.
+		* Devuelve una Lista de Tuplas donde se vincula el tipo de mesa con la cantidad
+		* de votantes sin turno que esperan ser asignados a ese tipo de mesa.
+		* La lista no puede tener 2 elementos para el mismo tipo de mesa.
+		*/
+	//}
+	
+	//public List<Tupla<String, Integer>> sinTurnoSegunTipoMesa(){
+
+	//}
+	//metodos que ya estaban
+	/**
+	 public void asignarTurno(Persona p) { 
+	 	// sobrecarga del metodo asignarTurno()
+		// revisa las condiciones de la persona y llama a su respectiva mesa para darle
+		// el turno,controla la logica de si es mayor de 65 (inclusive) y tiene una
+		// enfermedad preexistente, etc.
 	}
-
-	public void asignarTrabajadores(Persona p) {
-		// pide el certificado de trabajo
-
-	}
-
-	public void asignarMayores(Persona p) {
-		// limita el cupo a 10 por franja horario (9 contando al presidente)
-		// asigna el turno a las personas mayores de 65
-	}
-
-	public void asignarMesaNormal(Persona p) {
-		// limita el cupo a 30 por franja horario (29 contando al presidente)
-	}
-
+	
 	public void registroDeVotantes() {
 		// se encarga de almacenar los votantes, con su turno y si se presentó o no
 	}
@@ -137,5 +151,5 @@ public class SistemaDeTurnos {
 
 	// consulta el turno para una persona
 	public Boolean tieneTurno(Persona p) {
-	}
+	}**/
 }
