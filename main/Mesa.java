@@ -5,9 +5,11 @@ import java.util.*;
 public class Mesa {
 	public Map<Integer, Franja> _franjas;
 	public Integer _presidenteMesa;
+	public String _nombreMesa;
 	public Integer _numeroMesa = 7000;
 
 	public Mesa(String nombreMesa, Integer presidenteMesa) {
+		_nombreMesa = nombreMesa;
 		_presidenteMesa = presidenteMesa;
 
 	}
@@ -24,24 +26,24 @@ public class Mesa {
 	public static class MesaMayores extends Mesa {
 		// modela la mesa para las personas mayores de 65años, heredando los atributos
 		// de la clase Mesa.
-		public MesaMayores(Integer presidenteMesa) {
+		public MesaMayores(String nombreMesa, Integer presidenteMesa) {
 			// 8 <= franjas.keys <= 18
-			super("Mayor65", presidenteMesa);
+			super(nombreMesa, presidenteMesa);
 			_numeroMesa++;
 			_franjas = new HashMap<>();
-			asignarTurnoPresidente();
+			//asignarTurnoPresidente();
 		}
 	}
 
 	public static class MesaEnfPreexistentes extends Mesa {
 		// modela la mesa para las personas con enfermedades preexistentes, heredando
 		// los atributos de la clase Mesa.
-		public MesaEnfPreexistentes(Integer presidenteMesa) {
+		public MesaEnfPreexistentes(String nombreMesa, Integer presidenteMesa) {
 			// 8 <= franjas.keys <= 18
-			super("Enf_Preex", presidenteMesa);
+			super(nombreMesa, presidenteMesa);
 			_numeroMesa++;
 			_franjas = new HashMap<>();
-			asignarTurnoPresidente();
+			//asignarTurnoPresidente();
 
 		}
 	}
@@ -49,24 +51,24 @@ public class Mesa {
 	public static class MesaTrabajadores extends Mesa {
 		// modela la mesa para las personas que trabaja el dia de la votacion, heredando
 		// los atributos de la clase Mesa.
-		public MesaTrabajadores(Integer presidenteMesa) {
+		public MesaTrabajadores(String nombreMesa, Integer presidenteMesa) {
 			// franjas.keySet == 1 (que va de 8 a 12)
-			super("Trabajador", presidenteMesa);
+			super(nombreMesa, presidenteMesa);
 			_numeroMesa++;
 			_franjas = new HashMap<>();
-			asignarTurnoPresidente();
+			//asignarTurnoPresidente();
 		}
 	}
 
 	public static class MesaGeneral extends Mesa {
 		// modela la mesa para las personas que no entran en ningun grupo, heredando los
 		// atributos de la clase Mesa.
-		public MesaGeneral(Integer presidenteMesa) {
+		public MesaGeneral(String nombreMesa, Integer presidenteMesa) {
 			// 8 <= franjas.keys <= 18
-			super("General", presidenteMesa);
+			super(nombreMesa, presidenteMesa);
 			_numeroMesa++;
 			_franjas = new HashMap<>();
-			asignarTurnoPresidente();
+			//asignarTurnoPresidente();
 		}
 	}
 }

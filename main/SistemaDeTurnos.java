@@ -1,10 +1,8 @@
 package main;
 
 import java.util.*;
-
-import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
-
 import main.Mesa.*;
+
 
 public class SistemaDeTurnos {
 	private String _nombre;
@@ -38,15 +36,25 @@ public class SistemaDeTurnos {
 		if (!padron.containsKey(dni)) {
 			throw new RuntimeException("El presidente no se encuentra regitrado en el padron");
 		} else {
-			Mesa mesa = new Mesa(tipoMesa, dni);
-			if (mesa instanceof MesaMayores || mesa instanceof MesaEnfPreexistentes || mesa instanceof MesaTrabajadores
-					|| mesa instanceof MesaGeneral) {
-				mesas.add(mesa);
-				return mesa.get_numeroMesa();
-			} else {
-				throw new RuntimeException("El tipo de mesa no es válido");
+			if (tipoMesa.equals("Enf_Preex")) {
+				Mesa m = new MesaEnfPreexistentes(tipoMesa, dni);
+				mesas.add(m);
+				return m.get_numeroMesa();
+			}if (tipoMesa.equals("Trabajador")) {
+				Mesa m = new MesaTrabajadores(tipoMesa, dni);
+				mesas.add(m);
+				return m.get_numeroMesa();
+			}if (tipoMesa.equals("Mayor65")) {
+				Mesa m = new MesaMayores(tipoMesa, dni);
+				mesas.add(m);
+				return m.get_numeroMesa();
+			}if (tipoMesa.equals("General")) {
+				Mesa m = new MesaGeneral(tipoMesa, dni);
+				mesas.add(m);
+				return m.get_numeroMesa();
 			}
 		}
+		throw new RuntimeException("El tipo de mesa no es válido");
 		/*
 		 * if(tipoMesa.equals("Enf_Preex")) { Mesa mesa = new MesaEnfPreexistentes(dni);
 		 * return mesa.get_numeroMesa(); } if(tipoMesa.equals("Mayor65")) { Mesa mesa2 =
