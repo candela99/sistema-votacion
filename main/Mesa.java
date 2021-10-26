@@ -21,6 +21,20 @@ abstract public class Mesa {
 		return _numeroMesa;
 	}
 	
+	protected void inicializarFranjas(Integer cantFranjas) {
+		Integer horario = 8;
+		for (int i = 0; i < cantFranjas; i++) {
+			_franjas.put(horario, null);
+			horario++;
+		}
+	}
+	
+	public void agregarPersonaAFranja(Integer dni) {
+		_franjas.get(buscarTurnoLibre()).agregarPersona(dni);
+	}
+	
+	
+	
 	abstract Boolean tieneTurnosDisponibles();
 
 	void asignarTurnoPresidente() {
@@ -31,9 +45,9 @@ abstract public class Mesa {
 		return _franjas.keySet().size() == 0;
 	}
 	
+	abstract Integer buscarTurnoLibre();		//devuelve el horario con turnos libres
+		
 	
-	// asigna que mesa le toca a cada presidente y su respectivo turno
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -45,7 +59,6 @@ abstract public class Mesa {
 		return result;
 	}
 
-
 	public static class MesaMayores extends Mesa {
 		// modela la mesa para las personas mayores de 65años, heredando los atributos
 		// de la clase Mesa.
@@ -54,6 +67,7 @@ abstract public class Mesa {
 			super(nombreMesa, presidenteMesa);
 			_numeroMesa++;
 			_franjas = new HashMap<>();
+			inicializarFranjas(10);
 			//asignarTurnoPresidente();
 		}
 		public Boolean tieneTurnosDisponibles() {
@@ -65,6 +79,18 @@ abstract public class Mesa {
 			}
 			return hayTurnos;
 		}
+		
+		public Integer buscarTurnoLibre() {		//devuelve el horario que tenga turnos disponibles
+			for(Integer horario : _franjas.keySet()) {
+				if(_franjas.get(horario).cantDePersonas() <= 10) {
+					return horario;
+				}
+			}
+			throw new RuntimeException("Esta mesa no tiene turnos disponibles");
+		}
+		
+		
+		
 	}
 
 	public static class MesaEnfPreexistentes extends Mesa {
@@ -75,6 +101,7 @@ abstract public class Mesa {
 			super(nombreMesa, presidenteMesa);
 			_numeroMesa++;
 			_franjas = new HashMap<>();
+			inicializarFranjas(10);
 			//asignarTurnoPresidente();
 		}
 		public Boolean tieneTurnosDisponibles() {
@@ -86,6 +113,15 @@ abstract public class Mesa {
 			}
 			return hayTurnos;
 		}
+		
+		public Integer buscarTurnoLibre() {
+			for(Integer horario : _franjas.keySet()) {
+				if(_franjas.get(horario).cantDePersonas() <= 20) {
+					return horario;
+				}
+			}
+			throw new RuntimeException("Esta mesa no tiene turnos disponibles");
+		}
 	}
 
 	public static class MesaTrabajadores extends Mesa {
@@ -96,10 +132,15 @@ abstract public class Mesa {
 			super(nombreMesa, presidenteMesa);
 			_numeroMesa++;
 			_franjas = new HashMap<>();
+			inicializarFranjas(1);
 			//asignarTurnoPresidente();
 		}
 		public Boolean tieneTurnosDisponibles() {
 			return _franjas.keySet().size() <= 1;
+		}
+		
+		public Integer buscarTurnoLibre() {
+			return 8;
 		}
 	}
 
@@ -111,6 +152,7 @@ abstract public class Mesa {
 			super(nombreMesa, presidenteMesa);
 			_numeroMesa++;
 			_franjas = new HashMap<>();
+			inicializarFranjas(10);
 			//asignarTurnoPresidente();
 		}
 		public Boolean tieneTurnosDisponibles() {
@@ -121,6 +163,15 @@ abstract public class Mesa {
 				}
 			}
 			return hayTurnos;
+		}
+		
+		public Integer buscarTurnoLibre() {
+			for(Integer horario : _franjas.keySet()) {
+				if(_franjas.get(horario).cantDePersonas() <= 30) {
+					return horario;
+				}
+			}
+			throw new RuntimeException("Esta mesa no tiene turnos disponibles");
 		}
 	}
 }

@@ -2,10 +2,10 @@ package main;
 
 public class Turno {
 	private Mesa _mesa;
-	private Persona _persona;
+	private Integer _persona;
 	private Integer _horario;
 	
-	Turno(Persona p, Integer horario, Mesa m){
+	Turno(Integer p, Integer horario, Mesa m){
 		_persona = p;
 		_horario = horario;
 		_mesa = m;
@@ -14,7 +14,7 @@ public class Turno {
 		return _mesa;
 	}
 
-	public Persona get_persona() {
+	public Integer get_persona() {
 		return _persona;
 	}
 

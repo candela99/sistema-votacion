@@ -66,7 +66,19 @@ public class SistemaDeTurnos {
 	
 	
 	
-	
+	/* Asigna un turno a un votante determinado.
+	* - Si el DNI no pertenece a un votante registrado debe generar una excepción.
+	* 
+	* - Si el votante ya tiene turno asignado se devuelve el turno como: Número de
+	* Mesa y Franja Horaria.
+	* 
+	* - Si aún no tiene turno asignado se busca una franja horaria disponible en una
+	* mesa del tipo correspondiente al votante y se devuelve el turno asignado, como
+	* Número de Mesa y Franja Horaria.
+	* 
+	* - Si no hay mesas con horarios disponibles no modifica nada y devuelve null.
+	* (Se supone que el turno permitirá conocer la mesa y la franja horaria asignada)
+	*/
 	
 	public Tupla<Integer, Integer> asignarTurno(Integer dni) {
 		if(!padron.containsKey(dni)) {
@@ -76,6 +88,7 @@ public class SistemaDeTurnos {
 			Turno t = tieneTurno.get(dni); 	//retorna el Turno de la persona
 			return new Tupla<Integer, Integer>(t.get_mesa().get_numeroMesa(), t.get_horario());
 		}
+		
 		
 		
 	}

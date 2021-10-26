@@ -30,7 +30,7 @@ public class Persona {
 		return _EnfPreexistentes;
 	}
 
-	public Boolean get_trabaja() {
+	public Boolean esTrabajador() {
 		return _trabaja;
 	}
 	
