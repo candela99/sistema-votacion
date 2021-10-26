@@ -6,7 +6,7 @@ public class Franja { //8hs, 9hs, 10hs...
 	private Set<Integer> _franja;
 	//modela un HashSet de personas en cada franja horario, mostrando cual persona va en cada una
 	
-	Franja(){
+	public Franja(){
 		_franja = new HashSet<>();
 	}
 	
@@ -14,7 +14,7 @@ public class Franja { //8hs, 9hs, 10hs...
 		_franja.add(dniPersona);
 	}
 	
-	Integer cantDePersonas() {
+	public Integer cantDePersonas() {
 		return _franja.size();
 	}
 }

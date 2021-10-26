@@ -2,13 +2,13 @@ package main;
 
 import java.util.*;
 
-public class Mesa {
+abstract public class Mesa {
 	public Map<Integer, Franja> _franjas;
 	public Integer _presidenteMesa;
 	public String _nombreMesa;
 	public Integer _numeroMesa = 7000;
 
-	public Mesa(String nombreMesa, Integer presidenteMesa) {
+	Mesa(String nombreMesa, Integer presidenteMesa) {
 		_nombreMesa = nombreMesa;
 		_presidenteMesa = presidenteMesa;
 
@@ -17,6 +17,8 @@ public class Mesa {
 	public Integer get_numeroMesa() {
 		return _numeroMesa;
 	}
+	
+	abstract Boolean tieneTurnosDisponibles();
 
 	void asignarTurnoPresidente() {
 		_franjas.get(8).agregarPersona(_presidenteMesa);
@@ -33,6 +35,15 @@ public class Mesa {
 			_franjas = new HashMap<>();
 			//asignarTurnoPresidente();
 		}
+		public Boolean tieneTurnosDisponibles() {
+			Boolean hayTurnos = false;
+			if(_franjas.keySet().size() <= 10) {
+				for(Franja f : _franjas.values()) {
+					hayTurnos = hayTurnos || f.cantDePersonas() <= 10;
+				}
+			}
+			return hayTurnos;
+		}
 	}
 
 	public static class MesaEnfPreexistentes extends Mesa {
@@ -44,7 +55,15 @@ public class Mesa {
 			_numeroMesa++;
 			_franjas = new HashMap<>();
 			//asignarTurnoPresidente();
-
+		}
+		public Boolean tieneTurnosDisponibles() {
+			Boolean hayTurnos = false;
+			if(_franjas.keySet().size() <= 10) {
+				for(Franja f : _franjas.values()) {
+					hayTurnos = hayTurnos || f.cantDePersonas() <= 20;
+				}
+			}
+			return hayTurnos;
 		}
 	}
 
@@ -58,6 +77,9 @@ public class Mesa {
 			_franjas = new HashMap<>();
 			//asignarTurnoPresidente();
 		}
+		public Boolean tieneTurnosDisponibles() {
+			return _franjas.keySet().size() <= 1;
+		}
 	}
 
 	public static class MesaGeneral extends Mesa {
@@ -69,6 +91,15 @@ public class Mesa {
 			_numeroMesa++;
 			_franjas = new HashMap<>();
 			//asignarTurnoPresidente();
+		}
+		public Boolean tieneTurnosDisponibles() {
+			Boolean hayTurnos = false;
+			if(_franjas.keySet().size() <= 10) {
+				for(Franja f : _franjas.values()) {
+					hayTurnos = hayTurnos || f.cantDePersonas() <= 30;
+				}
+			}
+			return hayTurnos;
 		}
 	}
 }

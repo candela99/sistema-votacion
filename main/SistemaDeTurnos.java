@@ -10,14 +10,14 @@ public class SistemaDeTurnos {
 	private Map<Integer, Persona> padron; // Almacena las personas que estan en el padron, Integer dni, Persona p
 	private Set<Mesa> mesas; // Almacena las mesas
 	private Set<Integer> registroVotantes; // almacena los dni que ya votaron
-	private Map<Turno, Boolean> registro; // almacena los turnos y si se presento o no a votar
+	private Map<Integer, Turno> tieneTurno; // almacena los turnos y si se presento o no a votar
 
 	public SistemaDeTurnos(String nombreSistema) {
 		_nombre = nombreSistema;
 		padron = new HashMap<>();
 		mesas = new HashSet<>();
 		registroVotantes = new HashSet<>();
-		registro = new HashMap<>();
+		tieneTurno = new HashMap<>();
 	}
 
 	public void registrarVotante(Integer dni, String nombre, Integer edad, Boolean enfPrevia, Boolean trabaja) {

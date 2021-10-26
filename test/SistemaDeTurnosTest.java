@@ -1,9 +1,6 @@
 package test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.*;
 import org.junit.Before;
@@ -170,7 +167,7 @@ public class SistemaDeTurnosTest {
 		// <NumeroMesa, FranjaHoraria>
 		//final Tupla<Integer, Integer> turnoAsignado = sistema.consultaTurno(F.dniFrodo);
 
-		//assertNotNull(turno);
+		assertNotNull(turno);
 		System.out.println(turno);
 		//assertNotNull(turnoAsignado);
 	}
