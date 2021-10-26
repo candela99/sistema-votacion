@@ -10,4 +10,12 @@ public class Turno {
 		_horario = horario;
 		_m = m;
 	}
+
+	public Mesa get_m() {
+		return _m;
+	}
+
+	public Integer get_horario() {
+		return _horario;
+	}
 }

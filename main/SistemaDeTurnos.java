@@ -144,50 +144,82 @@ public class SistemaDeTurnos {
 	}
 
 	//public int votantesConTurno(String tipoMesa) {
-		/* Consulta el turno de un votante dado su DNI. Devuelve Mesa y franja horaria.
-		 * - Si el DNI no pertenece a un votante genera una excepción.
-		 * - Si el votante no tiene turno devuelve null.
+		/** Cantidad de votantes con Turno asignados al tipo de mesa que se pide.
+		 * - Permite conocer cuántos votantes se asignaron hasta el momento a alguno
+		 * de los tipos de mesa que componen el sistema de votación.
+		 * - Si la clase de mesa solicitada no es válida debe generar una excepción
 		 */
 	//}
+	public int votantesConTurno(String tipoMesa) {
+		/*
+		 * Cantidad de votantes con Turno asignados al tipo de mesa que se pide.
+		 * - Permite conocer cuántos votantes se asignaron hasta el momento a alguno
+		 * de los tipos de mesa que componen el sistema de votación.
+		 * - Si la clase de mesa solicitada no es válida debe generar una excepción
+		 */
+		for (Mesa mesa: mesas.values()) {
+			if(mesa instanceof MesaEnfPreexistentes && tipoMesa.equals("Enf_Preex")) {
+				return mesa._franjas.size()*20;
+			}
+			if(mesa instanceof MesaTrabajadores && tipoMesa.equals("Trabajador")) {
+				return mesa._franjas.size()*20;
+			}
+			if(mesa instanceof MesaMayores && tipoMesa.equals("Mayor65")) {
+				return mesa._franjas.size()*20;
+			}
+			if(mesa instanceof MesaGeneral && tipoMesa.equals("General")) {
+				return mesa._franjas.size()*20;
+			}
+		}
+		return _cantTurnosAsignados;
+	}
 	
 	//public Tupla<Integer, Integer> consultaTurno(int dni){
+		/** Consulta el turno de un votante dado su DNI. Devuelve Mesa y franja horaria.
+		* - Si el DNI no pertenece a un votante genera una excepción.
+		* - Si el votante no tiene turno devuelve null.
+		**/
+	//}
+	
+	public void addTieneTurno(Persona persona, Mesa mesa, Integer horario) {	
+		if(tieneTurno.containsKey(persona.get_dni()) && padron.containsKey(persona.get_dni())) {
+			tieneTurno.put(persona.get_dni(), new Turno(persona, horario, mesa));
+		}
+	}
+	
+	public Tupla<Integer, Integer> consultaTurno(int dni){
+		
+		/** Consulta el turno de un votante dado su DNI. Devuelve Mesa y franja horaria.
+		 * - Si el DNI no pertenece a un votante genera una excepción.
+		 * - Si el votante no tiene turno devuelve null. 
+		 **/
+		if(!padron.containsKey(dni)) {
+			throw new RuntimeException("el DNI no pertenece a un votante registrado");
+		}
+		if(tieneTurno.containsKey(dni)) {// almacena los turnos y si se presento o no a votar
+			return new Tupla<Integer, Integer>(tieneTurno.get(dni).get_m().get_numeroMesa(), tieneTurno.get(dni).get_horario()); 
+		}else{
+			return null;
+		}
+
+	}
+	
+	//public Map<Integer,List< Integer>> asignadosAMesa(int numMesa){
 		/* Dado un número de mesa, devuelve una Map cuya clave es la franja horaria y
 		 * el valor es una lista con los DNI de los votantes asignados a esa franja.
 		 * Sin importar si se presentaron o no a votar.
 		 * - Si el número de mesa no es válido genera una excepción.
 		 * - Si no hay asignados devuelve null.
-		 */
-	//}
-	
-	//public Map<Integer,List< Integer>> asignadosAMesa(int numMesa){
-		/* Consultar la cantidad de votantes sin turno asignados a cada tipo de mesa.
-		* Devuelve una Lista de Tuplas donde se vincula el tipo de mesa con la cantidad
-		* de votantes sin turno que esperan ser asignados a ese tipo de mesa.
-		* La lista no puede tener 2 elementos para el mismo tipo de mesa.
-		*/
 	//}
 	
 	//public List<Tupla<String, Integer>> sinTurnoSegunTipoMesa(){
+		/** Consultar la cantidad de votantes sin turno asignados a cada tipo de mesa.
+		 * Devuelve una Lista de Tuplas donde se vincula el tipo de mesa con la cantidad
+		 * de votantes sin turno que esperan ser asignados a ese tipo de mesa.
+		 * La lista no puede tener 2 elementos para el mismo tipo de mesa.
+		 **/
 
 	//}
-	//metodos que ya estaban
-	/**
-	 public void asignarTurno(Persona p) { 
-	 	// sobrecarga del metodo asignarTurno()
-		// revisa las condiciones de la persona y llama a su respectiva mesa para darle
-		// el turno,controla la logica de si es mayor de 65 (inclusive) y tiene una
-		// enfermedad preexistente, etc.
-	}
+
 	
-	public void registroDeVotantes() {
-		// se encarga de almacenar los votantes, con su turno y si se presentó o no
-	}
-
-	public int votanteSinTurno(Mesa m) {
-		// returna la cantidad de turnos restantes en una mesa
-	}
-
-	// consulta el turno para una persona
-	public Boolean tieneTurno(Persona p) {
-	}**/
 }
