@@ -14,6 +14,10 @@ public class Franja { //8hs, 9hs, 10hs...
 		_franja.add(dniPersona);
 	}
 	
+	public Set<Integer> getFranja(){
+		return _franja;
+	}
+	
 	public Integer cantDePersonas() {
 		return _franja.size();
 	}

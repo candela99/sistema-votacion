@@ -121,7 +121,7 @@ public class SistemaDeTurnosTest {
 		sistema.asignarTurnos();
 
 		// Franja -> List<Dni>
-		final Map<Integer, List<Integer>> franjaHoraria = sistema.asignadosAMesa(numMesaTrabajadores);
+		final Map<Integer, Franja> franjaHoraria = sistema.asignadosAMesa(numMesaTrabajadores);
 
 		final Set<Integer> votantes = extraerVotantes(franjaHoraria.values());
 
@@ -237,11 +237,11 @@ public class SistemaDeTurnosTest {
 		sistema.asignarTurnos();
 
 		// FranjaHoraria -> List<Dni>
-		final Map<Integer, List<Integer>> asignadosXFranjaHoraria = sistema.asignadosAMesa(numMesa);
-
-		for (List<Integer> franjaHoraria : asignadosXFranjaHoraria.values()) {
+		final Map<Integer, Franja> asignadosXFranjaHoraria = sistema.asignadosAMesa(numMesa);
+		System.out.println("Franja: " + asignadosXFranjaHoraria);
+		for (Franja franjaHoraria : asignadosXFranjaHoraria.values()) {
 			// Cada franja tiene que tener exactamente 20 votantes
-			assertEquals(F.cupoXFranjaHorariaEnfPreexistente, (Integer) franjaHoraria.size());
+			assertEquals(F.cupoXFranjaHorariaEnfPreexistente, (Integer) franjaHoraria.cantDePersonas());
 		}
 
 	}
@@ -254,10 +254,10 @@ public class SistemaDeTurnosTest {
 		return dnis;
 	}
 
-	private Set<Integer> extraerVotantes(Collection<List<Integer>> votantesXFranjaHoraria) {
+	private Set<Integer> extraerVotantes(Set<Franja> votantesXFranjaHoraria) {
 		Set<Integer> votantes = new HashSet<>();
-		for (List<Integer> listasDnis : votantesXFranjaHoraria) {
-			votantes.addAll(listasDnis);
+		for (Franja franja : votantesXFranjaHoraria) {
+			votantes.addAll(franja.getFranja());
 		}
 		return votantes;
 	}

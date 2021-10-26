@@ -26,7 +26,25 @@ abstract public class Mesa {
 	void asignarTurnoPresidente() {
 		_franjas.get(8).agregarPersona(_presidenteMesa);
 	}
+	
+	public Boolean sinTurnosAsignados() {
+		return _franjas.keySet().size() == 0;
+	}
+	
+	
 	// asigna que mesa le toca a cada presidente y su respectivo turno
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((_franjas == null) ? 0 : _franjas.hashCode());
+		result = prime * result + ((_nombreMesa == null) ? 0 : _nombreMesa.hashCode());
+		result = prime * result + ((_numeroMesa == null) ? 0 : _numeroMesa.hashCode());
+		result = prime * result + ((_presidenteMesa == null) ? 0 : _presidenteMesa.hashCode());
+		return result;
+	}
+
 
 	public static class MesaMayores extends Mesa {
 		// modela la mesa para las personas mayores de 65años, heredando los atributos

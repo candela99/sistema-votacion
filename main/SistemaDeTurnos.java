@@ -64,6 +64,10 @@ public class SistemaDeTurnos {
 		 */
 	}
 	
+	
+	
+	
+	
 	public Tupla<Integer, Integer> asignarTurno(int dni){
 		if(padron.containsKey(dni)) {
 			return new Tupla<Integer, Integer>(2, 8);
@@ -157,9 +161,14 @@ public class SistemaDeTurnos {
 	* - Si el número de mesa no es válido genera una excepción.
 	* - Si no hay asignados devuelve null.
 	*/
-	public Map<Integer,Franja> asignadosAMesa(int numMesa){
-		
-		
+	public Map<Integer,Franja> asignadosAMesa(Integer numMesa){
+		if(!mesas.containsKey(numMesa)) {
+			throw new RuntimeException("El numero de mesa no es válido");
+		}
+		if(mesas.get(numMesa).sinTurnosAsignados()) {
+			return null;
+		}
+		return mesas.get(numMesa).getFranjas();
 	}
 
 	//public int votantesConTurno(String tipoMesa) {
