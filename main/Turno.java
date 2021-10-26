@@ -1,21 +1,25 @@
 package main;
 
 public class Turno {
-	private Mesa _m;
-	private Persona _p;
+	private Mesa _mesa;
+	private Persona _persona;
 	private Integer _horario;
 	
 	Turno(Persona p, Integer horario, Mesa m){
-		_p = p;
+		_persona = p;
 		_horario = horario;
-		_m = m;
+		_mesa = m;
+	}
+	public Mesa get_mesa() {
+		return _mesa;
 	}
 
-	public Mesa get_m() {
-		return _m;
+	public Persona get_persona() {
+		return _persona;
 	}
 
 	public Integer get_horario() {
 		return _horario;
 	}
+	
 }

@@ -68,35 +68,16 @@ public class SistemaDeTurnos {
 	
 	
 	
-	public Tupla<Integer, Integer> asignarTurno(int dni){
-		if(padron.containsKey(dni)) {
-			return new Tupla<Integer, Integer>(2, 8);
-			/**
-			for (Mesa mesa: mesas) {
-				if(padron.get(dni).get_EnfPreexistentes() && mesa instanceof MesaEnfPreexistentes) {
-					this._CantTurnosAsignados++;
-					return new Tupla<Integer, Integer>(mesa.get_numeroMesa(), 8);
-				}
-				if(padron.get(dni).get_trabaja() &&  mesa instanceof MesaTrabajadores) {
-					this._CantTurnosAsignados++;
-					return new Tupla<Integer, Integer>(mesa.get_numeroMesa(), 8);
-				}
-				if(padron.get(dni).get_Edad()>65 && mesa instanceof MesaMayores) {
-					this._CantTurnosAsignados++;
-					return new Tupla<Integer, Integer>(mesa.get_numeroMesa(), 8);
-				}else {
-					this._CantTurnosAsignados++;
-					return new Tupla<Integer, Integer>(mesa.get_numeroMesa(), 8);
-				}
-			}**/
-		}else {
-			//throw new RuntimeException("Dni de votante no encontrado/registrado");
-			return null;
+	public Tupla<Integer, Integer> asignarTurno(Integer dni) {
+		if(!padron.containsKey(dni)) {
+			throw new RuntimeException("El dni no se encuentra registrado en el padron");
 		}
-		/* Asigna turnos automáticamente a los votantes sin turno.
-		* El sistema busca si hay alguna mesa y franja horaria factible en la que haya disponibilidad.
-		* Devuelve la cantidad de turnos que pudo asignar.
-		*/
+		if(tieneTurno.containsKey(dni)) {
+			Turno t = tieneTurno.get(dni); 	//retorna el Turno de la persona
+			return new Tupla<Integer, Integer>(t.get_mesa().get_numeroMesa(), t.get_horario());
+		}
+		
+		
 	}
 	/* Asigna turnos automáticamente a los votantes sin turno.
 	* El sistema busca si hay alguna mesa y franja horaria factible en la que haya disponibilidad.
@@ -197,7 +178,7 @@ public class SistemaDeTurnos {
 			throw new RuntimeException("el DNI no pertenece a un votante registrado");
 		}
 		if(tieneTurno.containsKey(dni)) {// almacena los turnos y si se presento o no a votar
-			return new Tupla<Integer, Integer>(tieneTurno.get(dni).get_m().get_numeroMesa(), tieneTurno.get(dni).get_horario()); 
+			return new Tupla<Integer, Integer>(tieneTurno.get(dni).get_mesa().get_numeroMesa(), tieneTurno.get(dni).get_horario()); 
 		}else{
 			return null;
 		}
