@@ -1,14 +1,19 @@
 package main;
 
 import java.util.*;
+
+import com.sun.tools.sjavac.comp.dependencies.PublicApiCollector;
+
 import main.Mesa.*;
 
 
 public class SistemaDeTurnos {
 	private String _nombre;
+	private int _anotadosEnfPreex = 1, _anotadosMayores = 1, _anotadosGeneral = 1;
+	private int _KeyEnfPreex = 8, _KeyMayores=8, _KeyGeneral = 8; 
 	private int _CantTurnosAsignados;
 	private Map<Integer, Persona> padron; // Almacena las personas que estan en el padron, Integer dni, Persona p
-	private Map<Integer, Mesa> mesas; // Almacena las mesas
+	private Map<Integer, Mesa> mesas; // Almacena las mesas. Key numeroDeMesa
 	private Set<Integer> registroVotantes; // almacena los dni que ya votaron
 	private Map<Integer, Turno> tieneTurno; // almacena los turnos y si se presento o no a votar
 
@@ -63,70 +68,95 @@ public class SistemaDeTurnos {
 		 * new MesaMayores(dni); return mesa2.get_numeroMesa(); }
 		 */
 	}
+	public void aver() {
+		System.out.println(mesas.keySet());
+	}
 	
 	public Tupla<Integer, Integer> asignarTurno(int dni){
-		if(padron.containsKey(dni)) {
-			return new Tupla<Integer, Integer>(2, 8);
-			/**
-			for (Mesa mesa: mesas) {
-				if(padron.get(dni).get_EnfPreexistentes() && mesa instanceof MesaEnfPreexistentes) {
-					this._CantTurnosAsignados++;
-					return new Tupla<Integer, Integer>(mesa.get_numeroMesa(), 8);
-				}
-				if(padron.get(dni).get_trabaja() &&  mesa instanceof MesaTrabajadores) {
-					this._CantTurnosAsignados++;
-					return new Tupla<Integer, Integer>(mesa.get_numeroMesa(), 8);
-				}
-				if(padron.get(dni).get_Edad()>65 && mesa instanceof MesaMayores) {
-					this._CantTurnosAsignados++;
-					return new Tupla<Integer, Integer>(mesa.get_numeroMesa(), 8);
-				}else {
-					this._CantTurnosAsignados++;
-					return new Tupla<Integer, Integer>(mesa.get_numeroMesa(), 8);
-				}
-			}**/
-		}else {
-			//throw new RuntimeException("Dni de votante no encontrado/registrado");
-			return null;
-		}
 		/* Asigna turnos automáticamente a los votantes sin turno.
 		* El sistema busca si hay alguna mesa y franja horaria factible en la que haya disponibilidad.
 		* Devuelve la cantidad de turnos que pudo asignar.
 		*/
+		if(!tieneTurno.containsKey(dni) && padron.containsKey(dni)) {//revisar si no tiene turno
+			Persona persona = padron.get(dni);
+			//for (Mesa mesa1: mesas.values()) {}
+				
+			Iterator<Integer> it = mesas.keySet().iterator();
+			while (it.hasNext()) {
+				Integer keyInteger = it.next();
+				Mesa mesa= mesas.get(keyInteger);	
+				if(persona.get_EnfPreexistentes() && mesa instanceof MesaEnfPreexistentes) {
+					if(this._anotadosEnfPreex==20) {
+						this._KeyEnfPreex++;
+					}
+					mesa._franjas.get(this._KeyEnfPreex).agregarPersona(dni);
+					this._anotadosEnfPreex++;
+					this. _CantTurnosAsignados++;
+					return new Tupla<Integer, Integer>(mesa.get_numeroMesa(), this._KeyEnfPreex);
+				}
+				if(persona.get_trabaja() &&  mesa instanceof MesaTrabajadores) {
+					mesa._franjas.get(8).agregarPersona(dni);
+					this. _CantTurnosAsignados++;
+					return new Tupla<Integer, Integer>(mesa.get_numeroMesa(), 8);
+				}
+				if(persona.get_Edad()>65 && mesa instanceof MesaMayores) {
+					if(this._anotadosMayores==10) {
+						this._KeyMayores++;
+					}
+					mesa._franjas.get(this._KeyMayores).agregarPersona(dni);
+					this._anotadosMayores++;
+					this. _CantTurnosAsignados++;
+					return new Tupla<Integer, Integer>(mesa.get_numeroMesa(), this._KeyMayores);
+				}
+				else if(persona.get_Edad()<65 && !persona.get_trabaja()&& !persona.get_EnfPreexistentes() && mesa instanceof MesaGeneral){
+					if(this._anotadosGeneral==20) {
+						this._KeyGeneral++;
+					}
+					mesa._franjas.get(this._KeyGeneral).agregarPersona(dni);
+					this._anotadosGeneral++;
+					this. _CantTurnosAsignados++;
+					return new Tupla<Integer, Integer>(mesa.get_numeroMesa(), this._KeyGeneral);
+				}
+			}	
+		}else {
+			//return null provisorio
+			return null;
+			
+		}
+		//return null provisorio
+		return null;
 	}
 
 	public void asignarTurnos() {
-		int anotadosEnfPreex = 1, anotadosMayores = 1, anotadosGeneral = 1;
-		int KeyEnfPreex = 8, KeyMayores=8, KeyGeneral = 8; 
 		Iterator<Integer> it = padron.keySet().iterator();
 		while (it.hasNext()) {
 			Integer keyInteger = it.next();
 			Persona persona = padron.get(keyInteger);
 			for (Mesa mesa: mesas.values()) {
 				if(persona.get_EnfPreexistentes() && mesa instanceof MesaEnfPreexistentes && mesa.tieneTurnosDisponibles()) {
-					if(anotadosEnfPreex==20) {
-						KeyEnfPreex++;
+					if(this._anotadosEnfPreex==20) {
+						this._KeyEnfPreex++;
 					}
-					mesa.getFranjas().get(KeyEnfPreex).agregarPersona(keyInteger);
-					anotadosEnfPreex++;
+					mesa.getFranjas().get(this._KeyEnfPreex).agregarPersona(keyInteger);
+					this._anotadosEnfPreex++;
 				}
 				if(persona.get_trabaja() &&  mesa instanceof MesaTrabajadores && mesa.tieneTurnosDisponibles()) {
 					// franjas.keySet == 1 (que va de 8 a 12)
 					mesa.getFranjas().get(1).agregarPersona(keyInteger);
 				}
 				if(persona.get_Edad()>65 && mesa instanceof MesaMayores && mesa.tieneTurnosDisponibles()) {
-					if(anotadosMayores==10) {
-						KeyMayores++;
+					if(this._anotadosMayores==10) {
+						this._KeyMayores++;
 					}
-					mesa.getFranjas().get(KeyMayores).agregarPersona(keyInteger);
-					anotadosMayores++;
+					mesa.getFranjas().get(this._KeyMayores).agregarPersona(keyInteger);
+					this._anotadosMayores++;
 				}
 				if(persona.get_Edad()<65 && !persona.get_trabaja()&& !persona.get_EnfPreexistentes() && mesa instanceof MesaMayores && mesa.tieneTurnosDisponibles()){
-					if(anotadosGeneral==20) {
-						KeyGeneral++;
+					if(this._anotadosGeneral==20) {
+						this._KeyGeneral++;
 					}
-					mesa.getFranjas().get(KeyGeneral).agregarPersona(keyInteger);
-					 anotadosGeneral++;
+					mesa.getFranjas().get(this._KeyGeneral).agregarPersona(keyInteger);
+					this._anotadosGeneral++;
 				}
 			}
 			
@@ -157,10 +187,9 @@ public class SistemaDeTurnos {
 	* - Si el número de mesa no es válido genera una excepción.
 	* - Si no hay asignados devuelve null.
 	*/
-	public Map<Integer,Franja> asignadosAMesa(int numMesa){
+	//public Map<Integer,Franja> asignadosAMesa(int numMesa){
 		
-		
-	}
+	//}
 
 	//public int votantesConTurno(String tipoMesa) {
 		/* Consulta el turno de un votante dado su DNI. Devuelve Mesa y franja horaria.
