@@ -6,7 +6,7 @@ import main.Mesa.*;
 
 public class SistemaDeTurnos {
 	private String _nombre;
-	private int _CantTurnosAsignados;
+	private Integer _cantTurnosAsignados;
 	private Map<Integer, Persona> padron; // Almacena las personas que estan en el padron, Integer dni, Persona p
 	private Map<Integer, Mesa> mesas; // Almacena las mesas
 	private Set<Integer> registroVotantes; // almacena los dni que ya votaron
@@ -98,46 +98,18 @@ public class SistemaDeTurnos {
 		* Devuelve la cantidad de turnos que pudo asignar.
 		*/
 	}
-
-	public void asignarTurnos() {
-		int anotadosEnfPreex = 1, anotadosMayores = 1, anotadosGeneral = 1;
-		int KeyEnfPreex = 8, KeyMayores=8, KeyGeneral = 8; 
-		Iterator<Integer> it = padron.keySet().iterator();
-		while (it.hasNext()) {
-			Integer keyInteger = it.next();
-			Persona persona = padron.get(keyInteger);
-			for (Mesa mesa: mesas.values()) {
-				if(persona.get_EnfPreexistentes() && mesa instanceof MesaEnfPreexistentes && mesa.tieneTurnosDisponibles()) {
-					if(anotadosEnfPreex==20) {
-						KeyEnfPreex++;
-					}
-					mesa.getFranjas().get(KeyEnfPreex).agregarPersona(keyInteger);
-					anotadosEnfPreex++;
-				}
-				if(persona.get_trabaja() &&  mesa instanceof MesaTrabajadores && mesa.tieneTurnosDisponibles()) {
-					// franjas.keySet == 1 (que va de 8 a 12)
-					mesa.getFranjas().get(1).agregarPersona(keyInteger);
-				}
-				if(persona.get_Edad()>65 && mesa instanceof MesaMayores && mesa.tieneTurnosDisponibles()) {
-					if(anotadosMayores==10) {
-						KeyMayores++;
-					}
-					mesa.getFranjas().get(KeyMayores).agregarPersona(keyInteger);
-					anotadosMayores++;
-				}
-				if(persona.get_Edad()<65 && !persona.get_trabaja()&& !persona.get_EnfPreexistentes() && mesa instanceof MesaMayores && mesa.tieneTurnosDisponibles()){
-					if(anotadosGeneral==20) {
-						KeyGeneral++;
-					}
-					mesa.getFranjas().get(KeyGeneral).agregarPersona(keyInteger);
-					 anotadosGeneral++;
-				}
+	/* Asigna turnos automáticamente a los votantes sin turno.
+	* El sistema busca si hay alguna mesa y franja horaria factible en la que haya disponibilidad.
+	* Devuelve la cantidad de turnos que pudo asignar.
+	*/
+	public Integer asignarTurnos() {
+		for(Integer dni : padron.keySet()) {
+			if(!tieneTurno.containsKey(dni)) {
+				asignarTurno(dni);
+				_cantTurnosAsignados++;
 			}
-			
 		}
-		// revisa las condiciones de la persona y llama a su respectiva mesa para darle
-		// el turno,controla la logica de si es mayor de 65 (inclusive) y tiene una
-		// enfermedad preexistente, etc.
+		return _cantTurnosAsignados;
 	}
 
 	
