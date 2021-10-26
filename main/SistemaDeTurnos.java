@@ -8,14 +8,14 @@ public class SistemaDeTurnos {
 	private String _nombre;
 	private int _CantTurnosAsignados;
 	private Map<Integer, Persona> padron; // Almacena las personas que estan en el padron, Integer dni, Persona p
-	private Set<Mesa> mesas; // Almacena las mesas
+	private Map<Integer, Mesa> mesas; // Almacena las mesas
 	private Set<Integer> registroVotantes; // almacena los dni que ya votaron
 	private Map<Integer, Turno> tieneTurno; // almacena los turnos y si se presento o no a votar
 
 	public SistemaDeTurnos(String nombreSistema) {
 		_nombre = nombreSistema;
 		padron = new HashMap<>();
-		mesas = new HashSet<>();
+		mesas = new HashMap<>();
 		registroVotantes = new HashSet<>();
 		tieneTurno = new HashMap<>();
 	}
@@ -29,8 +29,14 @@ public class SistemaDeTurnos {
 			padron.put(dni, p);
 		}
 	}
-
+	
 	public Integer agregarMesa(String tipoMesa, Integer dni) {
+		Mesa m = crearMesa(tipoMesa,dni);
+		mesas.put(m.get_numeroMesa(), m);
+		return m.get_numeroMesa();
+	}
+
+	public Mesa crearMesa(String tipoMesa, Integer dni) {
 		// registra la mesa segun su tipo junto con el dni del presidente y devuelve el
 		// numero de mesa
 		if (!padron.containsKey(dni)) {
@@ -38,20 +44,16 @@ public class SistemaDeTurnos {
 		} else {
 			if (tipoMesa.equals("Enf_Preex")) {
 				Mesa m = new MesaEnfPreexistentes(tipoMesa, dni);
-				mesas.add(m);
-				return m.get_numeroMesa();
+				return m;
 			}if (tipoMesa.equals("Trabajador")) {
 				Mesa m = new MesaTrabajadores(tipoMesa, dni);
-				mesas.add(m);
-				return m.get_numeroMesa();
+				return m;
 			}if (tipoMesa.equals("Mayor65")) {
 				Mesa m = new MesaMayores(tipoMesa, dni);
-				mesas.add(m);
-				return m.get_numeroMesa();
+				return m;
 			}if (tipoMesa.equals("General")) {
 				Mesa m = new MesaGeneral(tipoMesa, dni);
-				mesas.add(m);
-				return m.get_numeroMesa();
+				return m;
 			}
 		}
 		throw new RuntimeException("El tipo de mesa no es válido");
@@ -100,30 +102,30 @@ public class SistemaDeTurnos {
 		while (it.hasNext()) {
 			Integer keyInteger = it.next();
 			Persona persona = padron.get(keyInteger);
-			for (Mesa mesa: mesas) {
-				if(persona.get_EnfPreexistentes() && mesa instanceof MesaEnfPreexistentes) {
+			for (Mesa mesa: mesas.values()) {
+				if(persona.get_EnfPreexistentes() && mesa instanceof MesaEnfPreexistentes && mesa.tieneTurnosDisponibles()) {
 					if(anotadosEnfPreex==20) {
 						KeyEnfPreex++;
 					}
-					mesa._franjas.get(KeyEnfPreex).agregarPersona(keyInteger);
+					mesa.getFranjas().get(KeyEnfPreex).agregarPersona(keyInteger);
 					anotadosEnfPreex++;
 				}
-				if(persona.get_trabaja() &&  mesa instanceof MesaTrabajadores) {
+				if(persona.get_trabaja() &&  mesa instanceof MesaTrabajadores && mesa.tieneTurnosDisponibles()) {
 					// franjas.keySet == 1 (que va de 8 a 12)
-					mesa._franjas.get(1).agregarPersona(keyInteger);
+					mesa.getFranjas().get(1).agregarPersona(keyInteger);
 				}
-				if(persona.get_Edad()>65 && mesa instanceof MesaMayores) {
+				if(persona.get_Edad()>65 && mesa instanceof MesaMayores && mesa.tieneTurnosDisponibles()) {
 					if(anotadosMayores==10) {
 						KeyMayores++;
 					}
-					mesa._franjas.get(KeyMayores).agregarPersona(keyInteger);
+					mesa.getFranjas().get(KeyMayores).agregarPersona(keyInteger);
 					anotadosMayores++;
 				}
-				if(persona.get_Edad()<65 && !persona.get_trabaja()&& !persona.get_EnfPreexistentes() && mesa instanceof MesaMayores){
+				if(persona.get_Edad()<65 && !persona.get_trabaja()&& !persona.get_EnfPreexistentes() && mesa instanceof MesaMayores && mesa.tieneTurnosDisponibles()){
 					if(anotadosGeneral==20) {
 						KeyGeneral++;
 					}
-					mesa._franjas.get(KeyGeneral).agregarPersona(keyInteger);
+					mesa.getFranjas().get(KeyGeneral).agregarPersona(keyInteger);
 					 anotadosGeneral++;
 				}
 			}
@@ -147,6 +149,17 @@ public class SistemaDeTurnos {
 				return true;
 			}
 		}
+	}
+	
+	/* Dado un número de mesa, devuelve una Map cuya clave es la franja horaria y
+	* el valor es una lista con los DNI de los votantes asignados a esa franja.
+	* Sin importar si se presentaron o no a votar.
+	* - Si el número de mesa no es válido genera una excepción.
+	* - Si no hay asignados devuelve null.
+	*/
+	public Map<Integer,Franja> asignadosAMesa(int numMesa){
+		
+		
 	}
 
 	//public int votantesConTurno(String tipoMesa) {

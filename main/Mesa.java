@@ -3,17 +3,20 @@ package main;
 import java.util.*;
 
 abstract public class Mesa {
-	public Map<Integer, Franja> _franjas;
-	public Integer _presidenteMesa;
-	public String _nombreMesa;
-	public Integer _numeroMesa = 7000;
+	protected Map<Integer, Franja> _franjas;
+	protected Integer _presidenteMesa;
+	protected String _nombreMesa;
+	protected Integer _numeroMesa = 7000;
 
 	Mesa(String nombreMesa, Integer presidenteMesa) {
 		_nombreMesa = nombreMesa;
 		_presidenteMesa = presidenteMesa;
 
 	}
-
+	public Map<Integer, Franja> getFranjas(){
+		return _franjas;
+	}
+	
 	public Integer get_numeroMesa() {
 		return _numeroMesa;
 	}
