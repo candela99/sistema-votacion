@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Container;
 import java.util.*;
 import main.Mesa.*;
 
@@ -202,21 +203,34 @@ public class SistemaDeTurnos {
 		 * de los tipos de mesa que componen el sistema de votación.
 		 * - Si la clase de mesa solicitada no es válida debe generar una excepción
 		 */
+		int cont=0;
 		for (Mesa mesa: mesas.values()) {
 			if(mesa instanceof MesaEnfPreexistentes && tipoMesa.equals("Enf_Preex")) {
-				return mesa._franjas.size()*20;
+					for(Integer horaFranja : mesa.getFranjas().keySet()) {
+						cont+= mesa.getFranjas().get(horaFranja).getFranja().size();
+					}
+					return cont+=mesa.getFranjas().size();
 			}
 			if(mesa instanceof MesaTrabajadores && tipoMesa.equals("Trabajador")) {
-				return mesa._franjas.size()*20;
+				for(Integer horaFranja : mesa.getFranjas().keySet()) {
+					cont+= mesa.getFranjas().get(horaFranja).getFranja().size();
+				}
+				return cont+=mesa.getFranjas().size();
 			}
 			if(mesa instanceof MesaMayores && tipoMesa.equals("Mayor65")) {
-				return mesa._franjas.size()*20;
+				for(Integer horaFranja : mesa.getFranjas().keySet()) {
+					cont+= mesa.getFranjas().get(horaFranja).getFranja().size();
+				}
+				return cont+=mesa.getFranjas().size();
 			}
 			if(mesa instanceof MesaGeneral && tipoMesa.equals("General")) {
-				return mesa._franjas.size()*20;
+				for(Integer horaFranja : mesa.getFranjas().keySet()) {
+					cont+= mesa.getFranjas().get(horaFranja).getFranja().size();
+				}
+				return cont+=mesa.getFranjas().size();
 			}
 		}
-		return _cantTurnosAsignados;
+		return 0;
 	}
 	
 	//public Tupla<Integer, Integer> consultaTurno(int dni){
@@ -228,7 +242,7 @@ public class SistemaDeTurnos {
 	
 	public void addTieneTurno(Persona persona, Mesa mesa, Integer horario) {	
 		if(tieneTurno.containsKey(persona.get_dni()) && padron.containsKey(persona.get_dni())) {
-			tieneTurno.put(persona.get_dni(), new Turno(persona, horario, mesa));
+			tieneTurno.put(persona.get_dni(), new Turno(persona.get_dni(), horario, mesa));
 		}
 	}
 	
