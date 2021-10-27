@@ -24,7 +24,7 @@ abstract public class Mesa {
 	protected void inicializarFranjas(Integer cantFranjas) {
 		Integer horario = 8;
 		for (int i = 0; i < cantFranjas; i++) {
-			_franjas.put(horario, null);
+			_franjas.put(horario, new Franja());
 			horario++;
 		}
 	}

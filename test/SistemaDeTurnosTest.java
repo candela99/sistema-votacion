@@ -95,7 +95,7 @@ public class SistemaDeTurnosTest {
 	 */
 	@Test
 	public void asignacionTest() {
-		final int votantesEsperados = 3;
+		final Integer votantesEsperados = 3;
 
 		sistema.agregarMesa(F.enfPreexistente, F.dniFrodo);
 
@@ -160,16 +160,16 @@ public class SistemaDeTurnosTest {
 	 */
 	@Test
 	public void asignarTurnoTest() {
-		//sistema.agregarMesa(F.general, F.dniGaladriel);
+		sistema.agregarMesa(F.general, F.dniGaladriel);
 
 		// <NumeroMesa, FranjaHoraria>
 		final Tupla<Integer, Integer> turno = sistema.asignarTurno(F.dniFrodo);
 		// <NumeroMesa, FranjaHoraria>
-		//final Tupla<Integer, Integer> turnoAsignado = sistema.consultaTurno(F.dniFrodo);
+		final Tupla<Integer, Integer> turnoAsignado = sistema.consultaTurno(F.dniFrodo);
 
 		assertNotNull(turno);
 		System.out.println(turno);
-		//assertNotNull(turnoAsignado);
+		assertNotNull(turnoAsignado);
 	}
 
 	/*
@@ -254,9 +254,9 @@ public class SistemaDeTurnosTest {
 		return dnis;
 	}
 
-	private Set<Integer> extraerVotantes(Set<Franja> votantesXFranjaHoraria) {
+	private Set<Integer> extraerVotantes(Collection<Franja> collection) {
 		Set<Integer> votantes = new HashSet<>();
-		for (Franja franja : votantesXFranjaHoraria) {
+		for (Franja franja : collection) {
 			votantes.addAll(franja.getFranja());
 		}
 		return votantes;
