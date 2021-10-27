@@ -23,6 +23,7 @@ public class SistemaDeTurnosTest {
 		sistema.registrarVotante(F.dniLegolas, "Legolas", 80, !F.tieneEnfPrevia, F.trabaja);
 		sistema.registrarVotante(F.dniGaladriel, "Galadriel", 81, !F.tieneEnfPrevia, F.trabaja);
 		sistema.registrarVotante(F.dniArwen, "Arwen", 50, !F.tieneEnfPrevia, F.trabaja);
+		
 
 		// # Votantes = 7
 		// Mayores de 65 = 4
@@ -50,10 +51,10 @@ public class SistemaDeTurnosTest {
 		assertNotNull(numMesaGeneral);
 		assertNotNull(numMesaTrabajador);
 
-		//assertNotNull(sistema.consultaTurno(F.dniFrodo));
-		//assertNotNull(sistema.consultaTurno(F.dniBilbo));
-		//assertNotNull(sistema.consultaTurno(F.dniGaladriel));
-		//assertNotNull(sistema.consultaTurno(F.dniGandalf));
+		assertNotNull(sistema.consultaTurno(F.dniFrodo));
+		assertNotNull(sistema.consultaTurno(F.dniBilbo));
+		assertNotNull(sistema.consultaTurno(F.dniGaladriel));
+		assertNotNull(sistema.consultaTurno(F.dniGandalf));
 	}
 
 	/*
@@ -143,14 +144,15 @@ public class SistemaDeTurnosTest {
 		sistema.agregarMesa(F.mayor65, F.dniBilbo);
 
 		sistema.asignarTurnos();
-
+		System.out.println(sistema.sizeTieneTurno() + " size tieneTueno");
+		System.out.println(sistema.sizePadron() + " size padron");
 		// List<Tupla<TipoMesa, Cant Votantes Sin Turno>>
 		final List<Tupla<String, Integer>> votantesSinTurno = sistema.sinTurnoSegunTipoMesa();
 
 		final Integer cantVotantesSinTurno = extraerVotantesSinTurno(votantesSinTurno);
 
 		final Integer expectedVotantesSinTurno = 4;
-
+		System.out.println(extraerVotantesSinTurno(votantesSinTurno));
 		assertEquals(expectedVotantesSinTurno, cantVotantesSinTurno);
 	}
 

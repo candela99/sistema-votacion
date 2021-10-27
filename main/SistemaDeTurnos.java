@@ -269,29 +269,56 @@ public class SistemaDeTurnos {
 	 * importar si se presentaron o no a votar. - Si el número de mesa no es válido
 	 * genera una excepción. - Si no hay asignados devuelve null. //}
 	 */ 
-	
+	public Integer sizeTieneTurno() {
+		return tieneTurno.size();
+		
+	}
+	public Integer sizePadron() {
+		return padron.size();
+		
+	}
 	
 	 public List<Tupla<String, Integer>> sinTurnoSegunTipoMesa(){
 		 int trabajadores = 0, mayores = 0, enfPreex = 0, general = 0;
-		 
 		 List<Tupla<String, Integer>> lista= new ArrayList<>();
-		 //while iterator par ahacer it.next();
 		 for (Integer dni : padron.keySet()) {
-			 if(!tieneTurno.containsKey(dni)) {
-				 if(padron.get(dni).esTrabajador()) {
-					 trabajadores++;
-				 }
-				 if(padron.get(dni).get_Edad()>65) {
-					 mayores++;
-				 }
-				 if(padron.get(dni).get_EnfPreexistentes()) {
+			 Persona persona = padron.get(dni);
+			 if (!tieneTurno.containsKey(dni)) {
+				 if(persona.get_Edad()>65) {
+						mayores++;
+					}
+				 	else if(persona.esTrabajador()) {
+						trabajadores++;
+					}
+				 	else if(persona.get_EnfPreexistentes()) {
+						 enfPreex++;
+					 }
+					 else {
+						 general++;
+					 }
+			 }
+		 }
+				
+		/**			
+		Iterator<Integer> it = padron.keySet().iterator(); 
+		do {
+			Integer keyInteger = it.next();
+			Persona persona = padron.get(keyInteger);
+			if(!tieneTurno.containsKey(keyInteger)) {
+				if(persona.get_Edad()>65) {
+					mayores++;
+				}
+				if(persona.esTrabajador()) {
+					trabajadores++;
+				}
+				if(persona.get_EnfPreexistentes()) {
 					 enfPreex++;
 				 }
-				 else{
+				 else {
 					 general++;
 				 }
 			 }
-		}
+		} while (it.hasNext());**/
 		lista.add(new Tupla<String, Integer>("Trabajador", trabajadores));
 		lista.add(new Tupla<String, Integer>("Mayor65", mayores));
 		lista.add(new Tupla<String, Integer>("Enf_Preex", enfPreex));
