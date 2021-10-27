@@ -29,8 +29,11 @@ abstract public class Mesa {
 		}
 	}
 	
-	public void agregarPersonaAFranja(Integer dni) {
-		_franjas.get(buscarTurnoLibre()).agregarPersona(dni);
+	public Turno agregarPersonaAFranja(Integer dni) {
+		Integer horario = buscarTurnoLibre();
+		_franjas.get(horario).agregarPersona(dni);
+		Turno t = new Turno(dni,horario, this);
+		return t;
 	}
 	
 	

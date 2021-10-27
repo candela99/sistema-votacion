@@ -87,10 +87,61 @@ public class SistemaDeTurnos {
 		if(tieneTurno.containsKey(dni)) {
 			Turno t = tieneTurno.get(dni); 	//retorna el Turno de la persona
 			return new Tupla<Integer, Integer>(t.get_mesa().get_numeroMesa(), t.get_horario());
+		}else {
+			Persona votante = padron.get(dni);
+			if(votante.esTrabajador()) {
+				Turno t = mesas.get(mesaTrabajadores()).agregarPersonaAFranja(dni);
+				tieneTurno.put(dni, t);
+				return new Tupla<Integer, Integer>(mesaTrabajadores(), t.get_horario());
+			}
+			if(votante.get_EnfPreexistentes() && votante.get_Edad() >= 65) {
+				if(mesas.get(mesaEnfPreexistentes()).tieneTurnosDisponibles()) {
+					Turno t = mesas.get(mesaEnfPreexistentes()).agregarPersonaAFranja(dni);
+					tieneTurno.put(dni, t);
+					return new Tupla<Integer, Integer>(mesaEnfPreexistentes(), t.get_horario());
+				}else {
+					Turno t = mesas.get(mesaMayores()).agregarPersonaAFranja(dni);
+					tieneTurno.put(dni, t);
+					return new Tupla<Integer, Integer>(mesaMayores(), t.get_horario());
+				}
+			}
 		}
-		
-		
-		
+	}
+	
+	public Integer mesaTrabajadores() {
+		for (Integer numeroMesa : mesas.keySet()) {
+			if(mesas.get(numeroMesa) instanceof MesaTrabajadores) {
+				return numeroMesa;
+			}
+		}
+		return null;
+	}
+	
+	public Integer mesaEnfPreexistentes() {
+		for (Integer numeroMesa : mesas.keySet()) {
+			if(mesas.get(numeroMesa) instanceof MesaEnfPreexistentes) {
+				return numeroMesa;
+			}
+		}
+		return null;
+	}
+	
+	public Integer mesaGeneral() {
+		for (Integer numeroMesa : mesas.keySet()) {
+			if(mesas.get(numeroMesa) instanceof MesaGeneral) {
+				return numeroMesa;
+			}
+		}
+		return null;
+	}
+	
+	public Integer mesaMayores() {
+		for (Integer numeroMesa : mesas.keySet()) {
+			if(mesas.get(numeroMesa) instanceof MesaMayores) {
+				return numeroMesa;
+			}
+		}
+		return null;
 	}
 	/* Asigna turnos automáticamente a los votantes sin turno.
 	* El sistema busca si hay alguna mesa y franja horaria factible en la que haya disponibilidad.
