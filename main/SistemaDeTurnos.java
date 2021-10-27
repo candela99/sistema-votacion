@@ -34,6 +34,7 @@ public class SistemaDeTurnos {
 	public Integer agregarMesa(String tipoMesa, Integer dni) {
 		Mesa m = crearMesa(tipoMesa, dni);
 		mesas.put(m.get_numeroMesa(), m);
+		tieneTurno.put(dni, m.getTurnoPresidente());
 		return m.get_numeroMesa();
 	}
 

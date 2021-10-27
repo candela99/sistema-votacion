@@ -4,11 +4,12 @@ import java.util.*;
 
 abstract public class Mesa {
 	protected Map<Integer, Franja> _franjas;
+	protected Turno _turnoPresidente;
 	protected Integer _presidenteMesa;
 	protected String _nombreMesa;
-	protected Integer _numeroMesa = 7000;
+	protected Integer _numeroMesa;
 
-	Mesa(String nombreMesa, Integer presidenteMesa) {
+	public Mesa(String nombreMesa, Integer presidenteMesa) {
 		_nombreMesa = nombreMesa;
 		_presidenteMesa = presidenteMesa;
 
@@ -36,13 +37,11 @@ abstract public class Mesa {
 		return t;
 	}
 	
-	
+	public Turno getTurnoPresidente() {
+		return _turnoPresidente;
+	}
 	
 	abstract Boolean tieneTurnosDisponibles();
-
-	void asignarTurnoPresidente() {
-		_franjas.get(8).agregarPersona(_presidenteMesa);
-	}
 	
 	public Boolean sinTurnosAsignados() {
 		return _franjas.keySet().size() == 0;
@@ -68,10 +67,10 @@ abstract public class Mesa {
 		public MesaMayores(String nombreMesa, Integer presidenteMesa) {
 			// 8 <= franjas.keys <= 18
 			super(nombreMesa, presidenteMesa);
-			_numeroMesa++;
+			_numeroMesa = 7000;
 			_franjas = new HashMap<>();
 			inicializarFranjas(10);
-			//asignarTurnoPresidente();
+			_turnoPresidente = agregarPersonaAFranja(_presidenteMesa);
 		}
 		public Boolean tieneTurnosDisponibles() {
 			Boolean hayTurnos = false;
@@ -102,10 +101,10 @@ abstract public class Mesa {
 		public MesaEnfPreexistentes(String nombreMesa, Integer presidenteMesa) {
 			// 8 <= franjas.keys <= 18
 			super(nombreMesa, presidenteMesa);
-			_numeroMesa++;
+			_numeroMesa = 7001;
 			_franjas = new HashMap<>();
 			inicializarFranjas(10);
-			//asignarTurnoPresidente();
+			_turnoPresidente = agregarPersonaAFranja(_presidenteMesa);
 		}
 		public Boolean tieneTurnosDisponibles() {
 			Boolean hayTurnos = false;
@@ -133,10 +132,10 @@ abstract public class Mesa {
 		public MesaTrabajadores(String nombreMesa, Integer presidenteMesa) {
 			// franjas.keySet == 1 (que va de 8 a 12)
 			super(nombreMesa, presidenteMesa);
-			_numeroMesa++;
+			_numeroMesa = 7002;
 			_franjas = new HashMap<>();
 			inicializarFranjas(1);
-			//asignarTurnoPresidente();
+			_turnoPresidente = agregarPersonaAFranja(_presidenteMesa);
 		}
 		public Boolean tieneTurnosDisponibles() {
 			return _franjas.keySet().size() <= 1;
@@ -153,10 +152,10 @@ abstract public class Mesa {
 		public MesaGeneral(String nombreMesa, Integer presidenteMesa) {
 			// 8 <= franjas.keys <= 18
 			super(nombreMesa, presidenteMesa);
-			_numeroMesa++;
+			_numeroMesa = 7003;
 			_franjas = new HashMap<>();
 			inicializarFranjas(10);
-			//asignarTurnoPresidente();
+			_turnoPresidente = agregarPersonaAFranja(_presidenteMesa);
 		}
 		public Boolean tieneTurnosDisponibles() {
 			Boolean hayTurnos = false;
