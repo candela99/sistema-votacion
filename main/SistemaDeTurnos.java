@@ -2,6 +2,9 @@ package main;
 
 import java.awt.Container;
 import java.util.*;
+
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import main.Mesa.*;
 
 public class SistemaDeTurnos {
@@ -265,15 +268,43 @@ public class SistemaDeTurnos {
 	 * valor es una lista con los DNI de los votantes asignados a esa franja. Sin
 	 * importar si se presentaron o no a votar. - Si el número de mesa no es válido
 	 * genera una excepción. - Si no hay asignados devuelve null. //}
-	 * 
-	 * //public List<Tupla<String, Integer>> sinTurnoSegunTipoMesa(){ /** Consultar
-	 * la cantidad de votantes sin turno asignados a cada tipo de mesa. Devuelve una
-	 * Lista de Tuplas donde se vincula el tipo de mesa con la cantidad de votantes
-	 * sin turno que esperan ser asignados a ese tipo de mesa. La lista no puede
-	 * tener 2 elementos para el mismo tipo de mesa.
-	 **/
+	 */ 
+	
+	
+	 public List<Tupla<String, Integer>> sinTurnoSegunTipoMesa(){
+		 int trabajadores = 0, mayores = 0, enfPreex = 0, general = 0;
+		 
+		 List<Tupla<String, Integer>> lista= new ArrayList<>();
+		 //while iterator par ahacer it.next();
+		 for (Integer dni : padron.keySet()) {
+			 if(!tieneTurno.containsKey(dni)) {
+				 if(padron.get(dni).esTrabajador()) {
+					 trabajadores++;
+				 }
+				 if(padron.get(dni).get_Edad()>65) {
+					 mayores++;
+				 }
+				 if(padron.get(dni).get_EnfPreexistentes()) {
+					 enfPreex++;
+				 }
+				 else{
+					 general++;
+				 }
+			 }
+		}
+		lista.add(new Tupla<String, Integer>("Trabajador", trabajadores));
+		lista.add(new Tupla<String, Integer>("Mayor65", mayores));
+		lista.add(new Tupla<String, Integer>("Enf_Preex", enfPreex));
+		lista.add(new Tupla<String, Integer>("General", general));
+		return lista;
+		
+		/** Consultar la cantidad de votantes sin turno asignados a cada tipo de mesa. Devuelve una
+		 * Lista de Tuplas donde se vincula el tipo de mesa con la cantidad de votantes
+		 * sin turno que esperan ser asignados a ese tipo de mesa. La lista no puede
+		 * tener 2 elementos para el mismo tipo de mesa.
+		 **/
 
-	// }
+	}
 
 	public Integer mesaTrabajadores() {
 		for (Integer numeroMesa : mesas.keySet()) {
