@@ -76,7 +76,7 @@ abstract public class Mesa {
 			Boolean hayTurnos = false;
 			if(_franjas.keySet().size() <= 10) {
 				for(Franja f : _franjas.values()) {
-					hayTurnos = hayTurnos || f.cantDePersonas() <= 10;
+					hayTurnos = hayTurnos || f.cantDePersonas() < 10;
 				}
 			}
 			return hayTurnos;
@@ -84,7 +84,7 @@ abstract public class Mesa {
 		
 		public Integer buscarTurnoLibre() {		//devuelve el horario que tenga turnos disponibles
 			for(Integer horario : _franjas.keySet()) {
-				if(_franjas.get(horario).cantDePersonas() <= 10) {
+				if(_franjas.get(horario).cantDePersonas() < 10) {
 					return horario;
 				}
 			}
@@ -110,7 +110,7 @@ abstract public class Mesa {
 			Boolean hayTurnos = false;
 			if(_franjas.keySet().size() <= 10) {
 				for(Franja f : _franjas.values()) {
-					hayTurnos = hayTurnos || f.cantDePersonas() <= 20;
+					hayTurnos = hayTurnos || f.cantDePersonas() < 20;
 				}
 			}
 			return hayTurnos;
@@ -118,7 +118,7 @@ abstract public class Mesa {
 		
 		public Integer buscarTurnoLibre() {
 			for(Integer horario : _franjas.keySet()) {
-				if(_franjas.get(horario).cantDePersonas() <= 20) {
+				if(_franjas.get(horario).cantDePersonas() < 20) {
 					return horario;
 				}
 			}
@@ -161,7 +161,7 @@ abstract public class Mesa {
 			Boolean hayTurnos = false;
 			if(_franjas.keySet().size() <= 10) {
 				for(Franja f : _franjas.values()) {
-					hayTurnos = hayTurnos || f.cantDePersonas() <= 30;
+					hayTurnos = hayTurnos || f.cantDePersonas() < 30;
 				}
 			}
 			return hayTurnos;
@@ -169,7 +169,7 @@ abstract public class Mesa {
 		
 		public Integer buscarTurnoLibre() {
 			for(Integer horario : _franjas.keySet()) {
-				if(_franjas.get(horario).cantDePersonas() <= 30) {
+				if(_franjas.get(horario).cantDePersonas() < 30) {
 					return horario;
 				}
 			}

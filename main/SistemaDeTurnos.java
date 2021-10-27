@@ -95,34 +95,38 @@ public class SistemaDeTurnos {
 			return new Tupla<Integer, Integer>(t.get_mesa().get_numeroMesa(), t.get_horario());
 		} else {
 			Persona votante = padron.get(dni);
-			if (votante.esTrabajador()) {
+			if (votante.esTrabajador() && mesas.containsKey(mesaTrabajadores())) {
 				Turno t = mesas.get(mesaTrabajadores()).agregarPersonaAFranja(dni);
 				tieneTurno.put(dni, t);
 				return new Tupla<Integer, Integer>(mesaTrabajadores(), t.get_horario());
 			}
-			if (votante.get_EnfPreexistentes() && votante.get_Edad() >= 65) {
+			if (votante.get_EnfPreexistentes() && votante.get_Edad() >= 65
+					&& mesas.containsKey(mesaEnfPreexistentes())) {
 				if (mesas.get(mesaEnfPreexistentes()).tieneTurnosDisponibles()) {
 					Turno t = mesas.get(mesaEnfPreexistentes()).agregarPersonaAFranja(dni);
 					tieneTurno.put(dni, t);
 					return new Tupla<Integer, Integer>(mesaEnfPreexistentes(), t.get_horario());
 				} else {
-					Turno t = mesas.get(mesaMayores()).agregarPersonaAFranja(dni);
-					tieneTurno.put(dni, t);
-					return new Tupla<Integer, Integer>(mesaMayores(), t.get_horario());
+					if (mesas.containsKey(mesaMayores())) {
+						Turno t = mesas.get(mesaMayores()).agregarPersonaAFranja(dni);
+						tieneTurno.put(dni, t);
+						return new Tupla<Integer, Integer>(mesaMayores(), t.get_horario());
+					}
+
 				}
 			}
-			if (votante.get_EnfPreexistentes()) {
+			if (votante.get_EnfPreexistentes() && mesas.containsKey(mesaEnfPreexistentes())) {
 				Turno t = mesas.get(mesaEnfPreexistentes()).agregarPersonaAFranja(dni);
 				tieneTurno.put(dni, t);
 				return new Tupla<Integer, Integer>(mesaEnfPreexistentes(), t.get_horario());
 			}
-			if (votante.get_Edad() >= 65) {
+			if (votante.get_Edad() >= 65 && mesas.containsKey(mesaMayores())) {
 				Turno t = mesas.get(mesaMayores()).agregarPersonaAFranja(dni);
 				tieneTurno.put(dni, t);
 				return new Tupla<Integer, Integer>(mesaMayores(), t.get_horario());
 			}
 			if (!votante.get_EnfPreexistentes() && votante.get_Edad() < 65 && !votante.get_EnfPreexistentes()
-					&& !votante.esTrabajador()) {
+					&& !votante.esTrabajador() && mesas.containsKey(mesaGeneral())) {
 				Turno t = mesas.get(mesaGeneral()).agregarPersonaAFranja(dni);
 				tieneTurno.put(dni, t);
 				return new Tupla<Integer, Integer>(mesaGeneral(), t.get_horario());
@@ -139,8 +143,10 @@ public class SistemaDeTurnos {
 	public Integer asignarTurnos() {
 		for (Integer dni : padron.keySet()) {
 			if (!tieneTurno.containsKey(dni)) {
-				asignarTurno(dni);
-				_cantTurnosAsignados++;
+				Tupla<Integer, Integer> turno = asignarTurno(dni);
+				if (turno != null) {
+					_cantTurnosAsignados++;
+				}
 			}
 		}
 		return _cantTurnosAsignados;
