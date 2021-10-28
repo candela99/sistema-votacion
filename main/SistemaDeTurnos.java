@@ -189,32 +189,19 @@ public class SistemaDeTurnos {
 	 * los tipos de mesa que componen el sistema de votación. - Si la clase de mesa
 	 * solicitada no es válida debe generar una excepción
 	 */
-	public int votantesConTurno(String tipoMesa) {
-		int cont = 0;
+	public Integer votantesConTurno(String tipoMesa) {
 		for (Mesa mesa : mesas.values()) {
 			if (mesa instanceof MesaEnfPreexistentes && tipoMesa.equals("Enf_Preex")) {
-				for (Integer horaFranja : mesa.getFranjas().keySet()) {
-					cont += mesa.getFranjas().get(horaFranja).getFranja().size();
-				}
-				return cont += mesa.getFranjas().size();
+				return mesa.votantesPorMesa();
 			}
 			if (mesa instanceof MesaTrabajadores && tipoMesa.equals("Trabajador")) {
-				for (Integer horaFranja : mesa.getFranjas().keySet()) {
-					cont += mesa.getFranjas().get(horaFranja).getFranja().size();
-				}
-				return cont += mesa.getFranjas().size();
+				return mesa.votantesPorMesa();
 			}
 			if (mesa instanceof MesaMayores && tipoMesa.equals("Mayor65")) {
-				for (Integer horaFranja : mesa.getFranjas().keySet()) {
-					cont += mesa.getFranjas().get(horaFranja).getFranja().size();
-				}
-				return cont += mesa.getFranjas().size();
+				return mesa.votantesPorMesa(); 
 			}
 			if (mesa instanceof MesaGeneral && tipoMesa.equals("General")) {
-				for (Integer horaFranja : mesa.getFranjas().keySet()) {
-					cont += mesa.getFranjas().get(horaFranja).getFranja().size();
-				}
-				return cont += mesa.getFranjas().size();
+				return mesa.votantesPorMesa();
 			}
 		}
 		return 0;

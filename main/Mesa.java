@@ -8,15 +8,23 @@ abstract public class Mesa {
 	protected Integer _presidenteMesa;
 	protected String _nombreMesa;
 	protected Integer _numeroMesa;
+	protected Integer _cantVotantesPorMesa;
 
 	public Mesa(String nombreMesa, Integer presidenteMesa) {
 		_nombreMesa = nombreMesa;
 		_presidenteMesa = presidenteMesa;
-
+		_cantVotantesPorMesa = 0;
 	}
 
 	public String toStringMesa() {
 		return "Nombre de la mesa: " + _nombreMesa + " presidente de mesa: " + _presidenteMesa;
+	}
+	
+	public Integer votantesPorMesa() {
+		for (Franja f : _franjas.values()) {
+			_cantVotantesPorMesa += f.cantDePersonas();
+		}
+		return _cantVotantesPorMesa;
 	}
 
 	public Map<Integer, Franja> getFranjas() {
