@@ -190,21 +190,20 @@ public class SistemaDeTurnos {
 	 * solicitada no es válida debe generar una excepción
 	 */
 	public Integer votantesConTurno(String tipoMesa) {
-		for (Mesa mesa : mesas.values()) {
-			if (mesa instanceof MesaEnfPreexistentes && tipoMesa.equals("Enf_Preex")) {
-				return mesa.votantesPorMesa();
+			if (tipoMesa.equals("Enf_Preex")) {
+				return mesas.get(mesaEnfPreexistentes()).votantesPorMesa();
 			}
-			if (mesa instanceof MesaTrabajadores && tipoMesa.equals("Trabajador")) {
-				return mesa.votantesPorMesa();
+			if (tipoMesa.equals("Trabajador")) {
+				return mesas.get(mesaTrabajadores()).votantesPorMesa();
 			}
-			if (mesa instanceof MesaMayores && tipoMesa.equals("Mayor65")) {
-				return mesa.votantesPorMesa(); 
+			if (tipoMesa.equals("Mayor65")) {
+				return mesas.get(mesaMayores()).votantesPorMesa();
 			}
-			if (mesa instanceof MesaGeneral && tipoMesa.equals("General")) {
-				return mesa.votantesPorMesa();
+			if (tipoMesa.equals("General")) {
+				return mesas.get(mesaGeneral()).votantesPorMesa();
+			} else {
+				throw new RuntimeException ("El tipo de mesa no es valido");
 			}
-		}
-		return 0;
 	}
 
 	// public Tupla<Integer, Integer> consultaTurno(int dni){
