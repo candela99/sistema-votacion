@@ -13,7 +13,11 @@ public class Persona {
 		this._EnfPreexistentes = enfPreexistentes;
 		this._trabaja = trabaja;
 	}
-
+	
+	public String toStringMesa() {
+		return "Persona: -dni: " + _dni + " -nombre: " + _nombre + " -edad: " + _edad + " -Enfermedad Preexistente: " + _EnfPreexistentes + " -Trabaja: " + _trabaja; 
+	}
+	
 	public Integer get_dni() {
 		return _dni;
 	}

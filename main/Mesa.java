@@ -14,6 +14,11 @@ abstract public class Mesa {
 		_presidenteMesa = presidenteMesa;
 
 	}
+	
+	public String toStringMesa() {
+		return "Nombre de la mesa: " + _nombreMesa + " presidente de mesa: " + _presidenteMesa; 
+	}
+	
 	public Map<Integer, Franja> getFranjas(){
 		return _franjas;
 	}

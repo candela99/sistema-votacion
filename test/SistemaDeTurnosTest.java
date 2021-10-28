@@ -142,17 +142,16 @@ public class SistemaDeTurnosTest {
 		sistema.agregarMesa(F.general, F.dniFrodo);
 		sistema.agregarMesa(F.enfPreexistente, F.dniEowyn);
 		sistema.agregarMesa(F.mayor65, F.dniBilbo);
-
+		
 		sistema.asignarTurnos();
-		System.out.println(sistema.sizeTieneTurno() + " size tieneTueno");
-		System.out.println(sistema.sizePadron() + " size padron");
+		
 		// List<Tupla<TipoMesa, Cant Votantes Sin Turno>>
 		final List<Tupla<String, Integer>> votantesSinTurno = sistema.sinTurnoSegunTipoMesa();
-
+		
 		final Integer cantVotantesSinTurno = extraerVotantesSinTurno(votantesSinTurno);
-
+		
 		final Integer expectedVotantesSinTurno = 4;
-		System.out.println(extraerVotantesSinTurno(votantesSinTurno));
+		
 		assertEquals(expectedVotantesSinTurno, cantVotantesSinTurno);
 	}
 
