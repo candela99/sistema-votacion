@@ -36,10 +36,13 @@ abstract public class Mesa {
 	}
 	
 	public Turno agregarPersonaAFranja(Integer dni) {
-		Integer horario = buscarTurnoLibre();
-		_franjas.get(horario).agregarPersona(dni);
-		Turno t = new Turno(dni,horario, this);
-		return t;
+		if(tieneTurnosDisponibles()) {
+			Integer horario = buscarTurnoLibre();
+			_franjas.get(horario).agregarPersona(dni);
+			Turno t = new Turno(dni,horario, this);
+			return t;
+		}
+		return null;
 	}
 	
 	public Turno getTurnoPresidente() {
@@ -89,10 +92,11 @@ abstract public class Mesa {
 		
 		public Integer buscarTurnoLibre() {		//devuelve el horario que tenga turnos disponibles
 			for(Integer horario : _franjas.keySet()) {
-				if(_franjas.get(horario).cantDePersonas() < 10) {
+				if(_franjas.get(horario).cantDePersonas() < 10) {	//si es 10 no entra porq ya esta completa la franja
 					return horario;
 				}
 			}
+			
 			throw new RuntimeException("Esta mesa no tiene turnos disponibles");
 		}
 		
@@ -113,10 +117,8 @@ abstract public class Mesa {
 		}
 		public Boolean tieneTurnosDisponibles() {
 			Boolean hayTurnos = false;
-			if(_franjas.keySet().size() <= 10) {
-				for(Franja f : _franjas.values()) {
-					hayTurnos = hayTurnos || f.cantDePersonas() < 20;
-				}
+			for(Franja f : _franjas.values()) {
+				hayTurnos = hayTurnos || f.cantDePersonas() < 20;
 			}
 			return hayTurnos;
 		}

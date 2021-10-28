@@ -3,8 +3,6 @@ package main;
 import java.awt.Container;
 import java.util.*;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 import main.Mesa.*;
 
 public class SistemaDeTurnos {
@@ -98,41 +96,63 @@ public class SistemaDeTurnos {
 			return new Tupla<Integer, Integer>(t.get_mesa().get_numeroMesa(), t.get_horario());
 		} else {
 			Persona votante = padron.get(dni);
-			if (votante.esTrabajador() && mesas.containsKey(mesaTrabajadores())) {
-				Turno t = mesas.get(mesaTrabajadores()).agregarPersonaAFranja(dni);
-				tieneTurno.put(dni, t);
-				return new Tupla<Integer, Integer>(mesaTrabajadores(), t.get_horario());
+			if (votante.esTrabajador()) {
+				if(mesas.containsKey(mesaTrabajadores())) {
+					Turno t = mesas.get(mesaTrabajadores()).agregarPersonaAFranja(dni);
+					if(t != null) {
+						tieneTurno.put(dni, t);
+						return new Tupla<Integer, Integer>(mesaTrabajadores(), t.get_horario());
+					}
+				}else {
+					return null;
+				}
 			}
 			if (votante.get_EnfPreexistentes() && votante.get_Edad() >= 65
 					&& mesas.containsKey(mesaEnfPreexistentes())) {
 				if (mesas.get(mesaEnfPreexistentes()).tieneTurnosDisponibles()) {
 					Turno t = mesas.get(mesaEnfPreexistentes()).agregarPersonaAFranja(dni);
-					tieneTurno.put(dni, t);
-					return new Tupla<Integer, Integer>(mesaEnfPreexistentes(), t.get_horario());
+					if(t != null) {
+						tieneTurno.put(dni, t);
+						return new Tupla<Integer, Integer>(mesaEnfPreexistentes(), t.get_horario());
+					}
+					
 				} else {
 					if (mesas.containsKey(mesaMayores())) {
 						Turno t = mesas.get(mesaMayores()).agregarPersonaAFranja(dni);
-						tieneTurno.put(dni, t);
-						return new Tupla<Integer, Integer>(mesaMayores(), t.get_horario());
+						if(t!= null) {
+							tieneTurno.put(dni, t);
+							return new Tupla<Integer, Integer>(mesaMayores(), t.get_horario());
+						}
+						
 					}
 
 				}
 			}
 			if (votante.get_EnfPreexistentes() && mesas.containsKey(mesaEnfPreexistentes())) {
 				Turno t = mesas.get(mesaEnfPreexistentes()).agregarPersonaAFranja(dni);
-				tieneTurno.put(dni, t);
-				return new Tupla<Integer, Integer>(mesaEnfPreexistentes(), t.get_horario());
+				if(t!=null) {
+					tieneTurno.put(dni, t);
+					return new Tupla<Integer, Integer>(mesaEnfPreexistentes(), t.get_horario());
+				}
+				
 			}
 			if (votante.get_Edad() >= 65 && mesas.containsKey(mesaMayores())) {
 				Turno t = mesas.get(mesaMayores()).agregarPersonaAFranja(dni);
-				tieneTurno.put(dni, t);
-				return new Tupla<Integer, Integer>(mesaMayores(), t.get_horario());
+				if(t!=null) {
+					tieneTurno.put(dni, t);
+					return new Tupla<Integer, Integer>(mesaMayores(), t.get_horario());
+				}
+				
 			}
 			if (!votante.get_EnfPreexistentes() && votante.get_Edad() < 65 && !votante.get_EnfPreexistentes()
 					&& !votante.esTrabajador() && mesas.containsKey(mesaGeneral())) {
 				Turno t = mesas.get(mesaGeneral()).agregarPersonaAFranja(dni);
-				tieneTurno.put(dni, t);
-				return new Tupla<Integer, Integer>(mesaGeneral(), t.get_horario());
+				if(t!=null) {
+					tieneTurno.put(dni, t);
+					return new Tupla<Integer, Integer>(mesaGeneral(), t.get_horario());
+				}
+				
+				
 			}
 		}
 		return null;
