@@ -14,19 +14,24 @@ abstract public class Mesa {
 		_presidenteMesa = presidenteMesa;
 
 	}
-	
+
 	public String toStringMesa() {
-		return "Nombre de la mesa: " + _nombreMesa + " presidente de mesa: " + _presidenteMesa; 
+		return "Nombre de la mesa: " + _nombreMesa + " presidente de mesa: " + _presidenteMesa;
 	}
-	
-	public Map<Integer, Franja> getFranjas(){
+
+	public Map<Integer, Franja> getFranjas() {
 		return _franjas;
 	}
-	
+
 	public Integer get_numeroMesa() {
 		return _numeroMesa;
 	}
-	
+
+	/*
+	 * inicializa las franjas de cada mesa: agrega al map de franjas los horarios
+	 * como key y su value asociado es una Franja compuesta por un Set de dni's (por
+	 * el momento vacío) asignados a ese horario
+	 */
 	protected void inicializarFranjas(Integer cantFranjas) {
 		Integer horario = 8;
 		for (int i = 0; i < cantFranjas; i++) {
@@ -34,30 +39,32 @@ abstract public class Mesa {
 			horario++;
 		}
 	}
-	
+
+	// dado un dni, me fijo si la mesa que le corresponde segun sus condiciones
+	// tiene turnos disponibles
 	public Turno agregarPersonaAFranja(Integer dni) {
-		if(tieneTurnosDisponibles()) {
-			Integer horario = buscarTurnoLibre();
+		Boolean tieneTurnosDisponibles = buscarTurnoLibre().getX();
+		Integer horario = buscarTurnoLibre().getY();
+		if (tieneTurnosDisponibles) {
 			_franjas.get(horario).agregarPersona(dni);
-			Turno t = new Turno(dni,horario, this);
+			Turno t = new Turno(dni, horario, this);
 			return t;
 		}
 		return null;
 	}
-	
+
 	public Turno getTurnoPresidente() {
 		return _turnoPresidente;
 	}
-	
-	abstract Boolean tieneTurnosDisponibles();
-	
+
+//	abstract Boolean tieneTurnosDisponibles();
+
 	public Boolean sinTurnosAsignados() {
 		return _franjas.keySet().size() == 0;
 	}
-	
-	abstract Integer buscarTurnoLibre();		//devuelve el horario con turnos libres
-		
-	
+
+	abstract Tupla<Boolean, Integer> buscarTurnoLibre(); // devuelve el horario con turnos libres
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -80,28 +87,15 @@ abstract public class Mesa {
 			inicializarFranjas(10);
 			_turnoPresidente = agregarPersonaAFranja(_presidenteMesa);
 		}
-		public Boolean tieneTurnosDisponibles() {
-			Boolean hayTurnos = false;
-			if(_franjas.keySet().size() <= 10) {
-				for(Franja f : _franjas.values()) {
-					hayTurnos = hayTurnos || f.cantDePersonas() < 10;
+
+		public Tupla<Boolean, Integer> buscarTurnoLibre() {
+			for (Integer horario : _franjas.keySet()) {
+				if (_franjas.get(horario).cantDePersonas() < 10) {
+					return new Tupla<>(true, horario);
 				}
 			}
-			return hayTurnos;
+			return new Tupla<>(false, 0);
 		}
-		
-		public Integer buscarTurnoLibre() {		//devuelve el horario que tenga turnos disponibles
-			for(Integer horario : _franjas.keySet()) {
-				if(_franjas.get(horario).cantDePersonas() < 10) {	//si es 10 no entra porq ya esta completa la franja
-					return horario;
-				}
-			}
-			
-			throw new RuntimeException("Esta mesa no tiene turnos disponibles");
-		}
-		
-		
-		
 	}
 
 	public static class MesaEnfPreexistentes extends Mesa {
@@ -115,21 +109,14 @@ abstract public class Mesa {
 			inicializarFranjas(10);
 			_turnoPresidente = agregarPersonaAFranja(_presidenteMesa);
 		}
-		public Boolean tieneTurnosDisponibles() {
-			Boolean hayTurnos = false;
-			for(Franja f : _franjas.values()) {
-				hayTurnos = hayTurnos || f.cantDePersonas() < 20;
-			}
-			return hayTurnos;
-		}
-		
-		public Integer buscarTurnoLibre() {
-			for(Integer horario : _franjas.keySet()) {
-				if(_franjas.get(horario).cantDePersonas() < 20) {
-					return horario;
+
+		public Tupla<Boolean, Integer> buscarTurnoLibre() {
+			for (Integer horario : _franjas.keySet()) {
+				if (_franjas.get(horario).cantDePersonas() < 20) {
+					return new Tupla<>(true, horario);
 				}
 			}
-			throw new RuntimeException("Esta mesa no tiene turnos disponibles");
+			return new Tupla<>(false, 0);
 		}
 	}
 
@@ -144,12 +131,9 @@ abstract public class Mesa {
 			inicializarFranjas(1);
 			_turnoPresidente = agregarPersonaAFranja(_presidenteMesa);
 		}
-		public Boolean tieneTurnosDisponibles() {
-			return _franjas.keySet().size() <= 1;
-		}
-		
-		public Integer buscarTurnoLibre() {
-			return 8;
+
+		public Tupla<Boolean, Integer> buscarTurnoLibre() {
+			return new Tupla<>(true, 8);
 		}
 	}
 
@@ -164,23 +148,14 @@ abstract public class Mesa {
 			inicializarFranjas(10);
 			_turnoPresidente = agregarPersonaAFranja(_presidenteMesa);
 		}
-		public Boolean tieneTurnosDisponibles() {
-			Boolean hayTurnos = false;
-			if(_franjas.keySet().size() <= 10) {
-				for(Franja f : _franjas.values()) {
-					hayTurnos = hayTurnos || f.cantDePersonas() < 30;
+
+		public Tupla<Boolean, Integer> buscarTurnoLibre() {
+			for (Integer horario : _franjas.keySet()) {
+				if (_franjas.get(horario).cantDePersonas() < 30) {
+					return new Tupla<>(true, horario);
 				}
 			}
-			return hayTurnos;
-		}
-		
-		public Integer buscarTurnoLibre() {
-			for(Integer horario : _franjas.keySet()) {
-				if(_franjas.get(horario).cantDePersonas() < 30) {
-					return horario;
-				}
-			}
-			throw new RuntimeException("Esta mesa no tiene turnos disponibles");
+			return new Tupla<>(false, 0);
 		}
 	}
 }

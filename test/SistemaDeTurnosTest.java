@@ -23,12 +23,6 @@ public class SistemaDeTurnosTest {
 		sistema.registrarVotante(F.dniLegolas, "Legolas", 80, !F.tieneEnfPrevia, F.trabaja);
 		sistema.registrarVotante(F.dniGaladriel, "Galadriel", 81, !F.tieneEnfPrevia, F.trabaja);
 		sistema.registrarVotante(F.dniArwen, "Arwen", 50, !F.tieneEnfPrevia, F.trabaja);
-		
-
-		// # Votantes = 7
-		// Mayores de 65 = 4
-		// Trabajadores = 4
-		// EnfPrexistente = 2
 	}
 
 	/*
