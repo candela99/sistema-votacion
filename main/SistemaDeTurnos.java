@@ -190,45 +190,30 @@ public class SistemaDeTurnos {
 	 * solicitada no es válida debe generar una excepción
 	 */
 	public Integer votantesConTurno(String tipoMesa) {
-			if (tipoMesa.equals("Enf_Preex")) {
-				return mesas.get(mesaEnfPreexistentes()).votantesPorMesa();
-			}
-			if (tipoMesa.equals("Trabajador")) {
-				return mesas.get(mesaTrabajadores()).votantesPorMesa();
-			}
-			if (tipoMesa.equals("Mayor65")) {
-				return mesas.get(mesaMayores()).votantesPorMesa();
-			}
-			if (tipoMesa.equals("General")) {
-				return mesas.get(mesaGeneral()).votantesPorMesa();
-			} else {
-				throw new RuntimeException ("El tipo de mesa no es valido");
-			}
-	}
-
-	// public Tupla<Integer, Integer> consultaTurno(int dni){
-	/**
-	 * Consulta el turno de un votante dado su DNI. Devuelve Mesa y franja horaria.
-	 * - Si el DNI no pertenece a un votante genera una excepción. - Si el votante
-	 * no tiene turno devuelve null.
-	 **/
-	// }
-
-	public void addTieneTurno(Persona persona, Mesa mesa, Integer horario) {
-		if (tieneTurno.containsKey(persona.get_dni()) && padron.containsKey(persona.get_dni())) {
-			tieneTurno.put(persona.get_dni(), new Turno(persona.get_dni(), horario, mesa));
+		if (tipoMesa.equals("Enf_Preex")) {
+			return mesas.get(mesaEnfPreexistentes()).votantesPorMesa();
+		}
+		if (tipoMesa.equals("Trabajador")) {
+			return mesas.get(mesaTrabajadores()).votantesPorMesa();
+		}
+		if (tipoMesa.equals("Mayor65")) {
+			return mesas.get(mesaMayores()).votantesPorMesa();
+		}
+		if (tipoMesa.equals("General")) {
+			return mesas.get(mesaGeneral()).votantesPorMesa();
+		} else {
+			throw new RuntimeException("El tipo de mesa no es valido");
 		}
 	}
 
+	/*
+	 * Consulta el turno de un votante dado su DNI. Devuelve Mesa y franja horaria.
+	 * - Si el DNI no pertenece a un votante genera una excepción. - Si el votante
+	 * no tiene turno devuelve null.
+	 */
 	public Tupla<Integer, Integer> consultaTurno(int dni) {
-
-		/**
-		 * Consulta el turno de un votante dado su DNI. Devuelve Mesa y franja horaria.
-		 * - Si el DNI no pertenece a un votante genera una excepción. - Si el votante
-		 * no tiene turno devuelve null.
-		 **/
 		if (!padron.containsKey(dni)) {
-			throw new RuntimeException("el DNI no pertenece a un votante registrado");
+			throw new RuntimeException("El DNI no pertenece a un votante registrado");
 		}
 		if (tieneTurno.containsKey(dni)) {// almacena los turnos y si se presento o no a votar
 			return new Tupla<Integer, Integer>(tieneTurno.get(dni).get_mesa().get_numeroMesa(),
@@ -239,25 +224,14 @@ public class SistemaDeTurnos {
 
 	}
 
-	// public Map<Integer,List< Integer>> asignadosAMesa(int numMesa){
 	/*
-	 * Dado un número de mesa, devuelve una Map cuya clave es la franja horaria y el
-	 * valor es una lista con los DNI de los votantes asignados a esa franja. Sin
-	 * importar si se presentaron o no a votar. - Si el número de mesa no es válido
-	 * genera una excepción. - Si no hay asignados devuelve null. //}
+	 * Consultar la cantidad de votantes sin turno asignados a cada tipo de mesa.
+	 * Devuelve una Lista de Tuplas donde se vincula el tipo de mesa con la cantidad
+	 * de votantes sin turno que esperan ser asignados a ese tipo de mesa. La lista
+	 * no puede tener 2 elementos para el mismo tipo de mesa.
 	 */
-	public Integer sizeTieneTurno() {
-		return tieneTurno.size();
-
-	}
-
-	public Integer sizePadron() {
-		return padron.size();
-
-	}
-
 	public List<Tupla<String, Integer>> sinTurnoSegunTipoMesa() {
-		int trabajadores = 0, mayores = 0, enfPreex = 0, general = 0;
+		Integer trabajadores = 0, mayores = 0, enfPreex = 0, general = 0;
 		List<Tupla<String, Integer>> lista = new ArrayList<>();
 		for (Integer dni : padron.keySet()) {
 			Persona persona = padron.get(dni);
@@ -273,27 +247,11 @@ public class SistemaDeTurnos {
 				}
 			}
 		}
-
-		/**
-		 * Iterator<Integer> it = padron.keySet().iterator(); do { Integer keyInteger =
-		 * it.next(); Persona persona = padron.get(keyInteger);
-		 * if(!tieneTurno.containsKey(keyInteger)) { if(persona.get_Edad()>65) {
-		 * mayores++; } if(persona.esTrabajador()) { trabajadores++; }
-		 * if(persona.get_EnfPreexistentes()) { enfPreex++; } else { general++; } } }
-		 * while (it.hasNext());
-		 **/
 		lista.add(new Tupla<String, Integer>("Trabajador", trabajadores));
 		lista.add(new Tupla<String, Integer>("Mayor65", mayores));
 		lista.add(new Tupla<String, Integer>("Enf_Preex", enfPreex));
 		lista.add(new Tupla<String, Integer>("General", general));
 		return lista;
-
-		/**
-		 * Consultar la cantidad de votantes sin turno asignados a cada tipo de mesa.
-		 * Devuelve una Lista de Tuplas donde se vincula el tipo de mesa con la cantidad
-		 * de votantes sin turno que esperan ser asignados a ese tipo de mesa. La lista
-		 * no puede tener 2 elementos para el mismo tipo de mesa.
-		 **/
 
 	}
 
