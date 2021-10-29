@@ -146,6 +146,7 @@ public class SistemaDeTurnosTest {
 		
 		final Integer expectedVotantesSinTurno = 4;
 		
+		System.out.println(sistema.SistemaDeTurnostoString());
 		assertEquals(expectedVotantesSinTurno, cantVotantesSinTurno);
 	}
 

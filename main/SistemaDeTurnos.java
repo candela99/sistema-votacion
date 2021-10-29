@@ -23,14 +23,35 @@ public class SistemaDeTurnos {
 	}
 	
 	public String SistemaDeTurnostoString(){
-		return "Sistema de Turnos para Votación - "+_nombre;
+		return "Sistema de Turnos para Votación - "+_nombre + ".\nVotantes esperando turno: " + esperaTurno() + "\nVotantes con turnos asignados:\n" +
+				mostrarTurnos();
 	}
+	
 	/**
 	 Como mínimo se debe mostrar un título (Sistema de Turnos para Votación - UNGS), los votantes en
 	 espera para un turno, los votantes con turnos asignados mostrando sus respectivos turnos
 	 (número de mesa y franja horaria) y si votó o no. Las mesas habilitadas en el Sistema,
 	 mostrando de qué clase son y el nombre de su presidente. 
 	**/
+	public String mostrarTurnos() {
+		String mostrarTurno = "";	
+		for (Integer dni : tieneTurno.keySet()) {
+			mostrarTurno = mostrarTurno + " - " + dni + ". Numero de mesa: " + tieneTurno.get(dni).get_mesa()._numeroMesa + ". Franja horaria: " + tieneTurno.get(dni).get_horario() + ".\n"; 
+		}
+		return mostrarTurno;
+	}
+	public String esperaTurno() {
+		String esperaTurno = "";
+		for (Integer dni : padron.keySet()) {
+			Persona persona = padron.get(dni);
+			if (!tieneTurno.containsKey(dni)) {
+				esperaTurno = esperaTurno + " " + persona.get_dni();
+				}
+			}
+		return esperaTurno;
+		
+	}
+	
 
 
 	public void registrarVotante(Integer dni, String nombre, Integer edad, Boolean enfPrevia, Boolean trabaja) {
