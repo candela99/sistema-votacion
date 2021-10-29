@@ -14,7 +14,7 @@ public class Persona {
 		this._trabaja = trabaja;
 	}
 	
-	public String toStringMesa() {
+	public String toStringPersona() {
 		return "Persona: -dni: " + _dni + " -nombre: " + _nombre + " -edad: " + _edad + " -Enfermedad Preexistente: " + _EnfPreexistentes + " -Trabaja: " + _trabaja; 
 	}
 	

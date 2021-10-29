@@ -21,6 +21,17 @@ public class SistemaDeTurnos {
 		registroVotantes = new HashSet<>();
 		tieneTurno = new HashMap<>();
 	}
+	
+	public String SistemaDeTurnostoString(){
+		return "Sistema de Turnos para Votación - "+_nombre;
+	}
+	/**
+	 Como mínimo se debe mostrar un título (Sistema de Turnos para Votación - UNGS), los votantes en
+	 espera para un turno, los votantes con turnos asignados mostrando sus respectivos turnos
+	 (número de mesa y franja horaria) y si votó o no. Las mesas habilitadas en el Sistema,
+	 mostrando de qué clase son y el nombre de su presidente. 
+	**/
+
 
 	public void registrarVotante(Integer dni, String nombre, Integer edad, Boolean enfPrevia, Boolean trabaja) {
 		// se encarga de registrar las personas en el padron

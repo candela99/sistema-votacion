@@ -10,6 +10,11 @@ public class Turno {
 		_horario = horario;
 		_mesa = m;
 	}
+	
+	public String toStringTurno() {
+		return "Persona: " + _persona + ", mesa: " + _mesa._nombreMesa + ", horario: " + _horario; 
+	}
+	
 	public Mesa get_mesa() {
 		return _mesa;
 	}
