@@ -10,6 +10,14 @@ public class Franja { //8hs, 9hs, 10hs...
 		_franja = new HashSet<>();
 	}
 	
+	public String toStringFranja() {
+		String personarPorFranjaString = "";
+		for (Integer dni : _franja) {
+			personarPorFranjaString = personarPorFranjaString  + dni + " "; 
+		}
+		return "Franja: " + personarPorFranjaString;
+	}
+	
 	void agregarPersona(Integer dniPersona) {
 		_franja.add(dniPersona);
 	}

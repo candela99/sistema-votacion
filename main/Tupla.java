@@ -8,6 +8,10 @@ public class Tupla<X, Y> {
 		this.x = x;
 		this.y = y;
 	}
+	
+	public String toStringTupla() {
+		return "Tupla: " + x + " " + y;
+	}
 
 	public X getX() {
 		return x;
