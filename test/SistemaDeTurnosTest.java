@@ -164,7 +164,7 @@ public class SistemaDeTurnosTest {
 		final Tupla<Integer, Integer> turnoAsignado = sistema.consultaTurno(F.dniFrodo);
 
 		assertNotNull(turno);
-		System.out.println(turno);
+		//System.out.println(turno);
 		assertNotNull(turnoAsignado);
 	}
 
@@ -234,7 +234,7 @@ public class SistemaDeTurnosTest {
 
 		// FranjaHoraria -> List<Dni>
 		final Map<Integer, Franja> asignadosXFranjaHoraria = sistema.asignadosAMesa(numMesa);
-		System.out.println("Franja: " + asignadosXFranjaHoraria);
+		//System.out.println("Franja: " + asignadosXFranjaHoraria);
 		for (Franja franjaHoraria : asignadosXFranjaHoraria.values()) {
 			// Cada franja tiene que tener exactamente 20 votantes
 			assertEquals(F.cupoXFranjaHorariaEnfPreexistente, (Integer) franjaHoraria.cantDePersonas());

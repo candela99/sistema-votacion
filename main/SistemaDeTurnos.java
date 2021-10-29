@@ -21,37 +21,6 @@ public class SistemaDeTurnos {
 		registroVotantes = new HashSet<>();
 		tieneTurno = new HashMap<>();
 	}
-	
-	public String SistemaDeTurnostoString(){
-		return "Sistema de Turnos para Votación - "+_nombre + ".\nVotantes esperando turno: " + esperaTurno() + "\nVotantes con turnos asignados:\n" +
-				mostrarTurnos();
-	}
-	
-	/**
-	 Como mínimo se debe mostrar un título (Sistema de Turnos para Votación - UNGS), los votantes en
-	 espera para un turno, los votantes con turnos asignados mostrando sus respectivos turnos
-	 (número de mesa y franja horaria) y si votó o no. Las mesas habilitadas en el Sistema,
-	 mostrando de qué clase son y el nombre de su presidente. 
-	**/
-	public String mostrarTurnos() {
-		String mostrarTurno = "";	
-		for (Integer dni : tieneTurno.keySet()) {
-			mostrarTurno = mostrarTurno + " - " + dni + ". Numero de mesa: " + tieneTurno.get(dni).get_mesa()._numeroMesa + ". Franja horaria: " + tieneTurno.get(dni).get_horario() + ".\n"; 
-		}
-		return mostrarTurno;
-	}
-	public String esperaTurno() {
-		String esperaTurno = "";
-		for (Integer dni : padron.keySet()) {
-			Persona persona = padron.get(dni);
-			if (!tieneTurno.containsKey(dni)) {
-				esperaTurno = esperaTurno + " " + persona.get_dni();
-				}
-			}
-		return esperaTurno;
-		
-	}
-	
 
 
 	public void registrarVotante(Integer dni, String nombre, Integer edad, Boolean enfPrevia, Boolean trabaja) {
@@ -286,6 +255,48 @@ public class SistemaDeTurnos {
 		return lista;
 
 	}
+	
+	public String SistemaDeTurnostoString(){
+		return "Sistema de Turnos para Votación - "+_nombre + ".\n\nVotantes esperando turno: " + esperaTurnoString() + "\n\nVotantes con turnos asignados:\n" +
+				mostrarTurnosString() + "\nMesas habilitadas en el Sistema:\n" + mostrarMesaString();
+	}
+	
+	/**
+	 Como mínimo se debe mostrar un título (Sistema de Turnos para Votación - UNGS), los votantes en
+	 espera para un turno, los votantes con turnos asignados mostrando sus respectivos turnos
+	 (número de mesa y franja horaria) y si votó o no. Las mesas habilitadas en el Sistema,
+	 mostrando de qué clase son y el nombre de su presidente. 
+	**/
+	public String mostrarMesaString() {
+		String mostrarMesa = "";
+		for(Integer Nmesa: mesas.keySet()) {
+			mostrarMesa = mostrarMesa + " - " + mesas.get(Nmesa).toStringMesa() + "\n";
+		}
+		return mostrarMesa;
+	}
+	public String mostrarTurnosString() {
+		String mostrarTurno = "";	
+		for (Integer dni : tieneTurno.keySet()) {
+			if(registroVotantes.contains(dni)) {
+				mostrarTurno = mostrarTurno + " - " + dni + ". Numero de mesa: " + tieneTurno.get(dni).get_mesa()._numeroMesa + ". Franja horaria: " + tieneTurno.get(dni).get_horario() + ". Ya votó\n"; 
+			}else {
+				mostrarTurno = mostrarTurno + " - " + dni + ". Numero de mesa: " + tieneTurno.get(dni).get_mesa()._numeroMesa + ". Franja horaria: " + tieneTurno.get(dni).get_horario() + ". No votó\n";
+			}
+		}
+		return mostrarTurno;
+	}
+	public String esperaTurnoString() {
+		String esperaTurno = "";
+		for (Integer dni : padron.keySet()) {
+			Persona persona = padron.get(dni);
+			if (!tieneTurno.containsKey(dni)) {
+				esperaTurno = esperaTurno + " " + persona.get_dni();
+				}
+			}
+		return esperaTurno;
+		
+	}
+	
 
 	public Integer mesaTrabajadores() {
 		for (Integer numeroMesa : mesas.keySet()) {
