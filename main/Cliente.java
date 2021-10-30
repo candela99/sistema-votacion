@@ -9,7 +9,7 @@ public class Cliente {
 
 	public static void main(String[] args) {
 
-		SistemaDeTurnos sistema = new SistemaDeTurnos("Sistema");
+		SistemaDeTurnos sistema = new SistemaDeTurnos("UNGS");
 
 		sistema.registrarVotante(F.dniFrodo, "Frodo", 23, !F.tieneEnfPrevia, !F.trabaja);
 		sistema.registrarVotante(F.dniEowyn, "Eowyn", 25, F.tieneEnfPrevia, !F.trabaja);
@@ -32,7 +32,6 @@ public class Cliente {
 		System.out.println("Numeros de mesa generados: " + numMesaEnfPreexistente + " " + numMesaMayor65 + " "
 				+ numMesaGeneral + " " + numMesaTrabajador);
 
-		// hacer el toString de tupla!
 		System.out.println("Turnos generados [Paso 1]: ");
 		System.out.println("\t- " + sistema.consultaTurno(F.dniFrodo));
 		System.out.println("\t- " + sistema.consultaTurno(F.dniBilbo));
@@ -57,10 +56,10 @@ public class Cliente {
 
 		System.out.println("Cant votantes sin turno :" + votantesSinTurno.size());
 
-		Map<Integer, List<Integer>> MesaEnfPreexistente = sistema.asignadosAMesa(numMesaEnfPreexistente);
-		Map<Integer, List<Integer>> MesaMayor65 = sistema.asignadosAMesa(numMesaMayor65);
-		Map<Integer, List<Integer>> MesaGeneral = sistema.asignadosAMesa(numMesaGeneral);
-		Map<Integer, List<Integer>> MesaTrabajador = sistema.asignadosAMesa(numMesaTrabajador);
+		Map<Integer, Franja> MesaEnfPreexistente = sistema.asignadosAMesa(numMesaEnfPreexistente);
+		Map<Integer, Franja> MesaMayor65 = sistema.asignadosAMesa(numMesaMayor65);
+		Map<Integer, Franja> MesaGeneral = sistema.asignadosAMesa(numMesaGeneral);
+		Map<Integer, Franja> MesaTrabajador = sistema.asignadosAMesa(numMesaTrabajador);
 
 		System.out.println("Cant Turnos generados [Paso 2]:");
 		System.out.println("\t- " + MesaEnfPreexistente.size());
@@ -68,11 +67,11 @@ public class Cliente {
 		System.out.println("\t- " + MesaGeneral.size());
 		System.out.println("\t- " + MesaTrabajador.size());
 
-		// Franja -> List<Dni>
-		Map<Integer, List<Integer>> franjaHoraria1 = sistema.asignadosAMesa(numMesaEnfPreexistente);
-		Map<Integer, List<Integer>> franjaHoraria2 = sistema.asignadosAMesa(numMesaMayor65);
-		Map<Integer, List<Integer>> franjaHoraria3 = sistema.asignadosAMesa(numMesaGeneral);
-		Map<Integer, List<Integer>> franjaHoraria4 = sistema.asignadosAMesa(numMesaTrabajador);
+		// Franja -> Set<Dni>
+		Map<Integer, Franja> franjaHoraria1 = sistema.asignadosAMesa(numMesaEnfPreexistente);
+		Map<Integer, Franja> franjaHoraria2 = sistema.asignadosAMesa(numMesaMayor65);
+		Map<Integer, Franja> franjaHoraria3 = sistema.asignadosAMesa(numMesaGeneral);
+		Map<Integer, Franja> franjaHoraria4 = sistema.asignadosAMesa(numMesaTrabajador);
 
 		System.out.println("Cant Turnos generados [Paso 3]:");
 		System.out.println("\t- " + franjaHoraria1.size());

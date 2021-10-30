@@ -1,6 +1,5 @@
 package main;
 
-import java.awt.Container;
 import java.util.*;
 
 import main.Mesa.*;
@@ -11,7 +10,7 @@ public class SistemaDeTurnos {
 	private Map<Integer, Persona> padron; // Almacena las personas que estan en el padron, Integer dni, Persona p
 	private Map<Integer, Mesa> mesas; // Almacena numero de mesa -> Mesa
 	private Set<Integer> registroVotantes; // almacena los dni que ya votaron
-	private Map<Integer, Turno> tieneTurno; // almacena los turnos y si se presento o no a votar
+	private Map<Integer, Turno> tieneTurno; // almacena los turnos
 
 	public SistemaDeTurnos(String nombreSistema) {
 		_nombre = nombreSistema;
@@ -21,7 +20,6 @@ public class SistemaDeTurnos {
 		registroVotantes = new HashSet<>();
 		tieneTurno = new HashMap<>();
 	}
-
 
 	public void registrarVotante(Integer dni, String nombre, Integer edad, Boolean enfPrevia, Boolean trabaja) {
 		// se encarga de registrar las personas en el padron
@@ -79,8 +77,6 @@ public class SistemaDeTurnos {
 	 * (Se supone que el turno permitirá conocer la mesa y la franja horaria
 	 * asignada)
 	 */
-
-	// me serviria un Mesa asignarMesa() para limpiar el codigo. PROBAR
 	public Tupla<Integer, Integer> asignarTurno(Integer dni) {
 		if (!padron.containsKey(dni)) {
 			throw new RuntimeException("El dni no se encuentra registrado en el padron");
@@ -216,7 +212,7 @@ public class SistemaDeTurnos {
 		if (!padron.containsKey(dni)) {
 			throw new RuntimeException("El DNI no pertenece a un votante registrado");
 		}
-		if (tieneTurno.containsKey(dni)) {// almacena los turnos y si se presento o no a votar
+		if (tieneTurno.containsKey(dni)) {
 			return new Tupla<Integer, Integer>(tieneTurno.get(dni).get_mesa().get_numeroMesa(),
 					tieneTurno.get(dni).get_horario());
 		} else {
@@ -255,48 +251,62 @@ public class SistemaDeTurnos {
 		return lista;
 
 	}
-	
-	public String SistemaDeTurnostoString(){
-		return "Sistema de Turnos para Votación - "+_nombre + ".\n\nVotantes esperando turno: " + esperaTurnoString() + "\n\nVotantes con turnos asignados:\n" +
-				mostrarTurnosString() + "\nMesas habilitadas en el Sistema:\n" + mostrarMesaString();
+
+	@Override
+	public String toString() {
+		return "Sistema de Turnos para Votación - " + _nombre + ".\n\nVotantes esperando turno: " + esperaTurnoString()
+				+ "\n\nVotantes con turnos asignados:\n" + mostrarTurnosString()
+				+ "\nMesas habilitadas en el Sistema:\n" + mostrarMesaString();
 	}
-	
+
 	/**
-	 Como mínimo se debe mostrar un título (Sistema de Turnos para Votación - UNGS), los votantes en
-	 espera para un turno, los votantes con turnos asignados mostrando sus respectivos turnos
-	 (número de mesa y franja horaria) y si votó o no. Las mesas habilitadas en el Sistema,
-	 mostrando de qué clase son y el nombre de su presidente. 
-	**/
+	 * Como mínimo se debe mostrar un título (Sistema de Turnos para Votación -
+	 * UNGS), los votantes en espera para un turno, los votantes con turnos
+	 * asignados mostrando sus respectivos turnos (número de mesa y franja horaria)
+	 * y si votó o no. Las mesas habilitadas en el Sistema, mostrando de qué clase
+	 * son y el nombre de su presidente.
+	 **/
 	public String mostrarMesaString() {
-		String mostrarMesa = "";
-		for(Integer Nmesa: mesas.keySet()) {
-			mostrarMesa = mostrarMesa + " - " + mesas.get(Nmesa).toStringMesa() + "\n";
+		StringBuilder mostrarMesa = new StringBuilder();
+		for (Integer Nmesa : mesas.keySet()) {
+			mostrarMesa.append(" - ");
+			mostrarMesa.append(mesas.get(Nmesa));
+			mostrarMesa.append("\n");
 		}
-		return mostrarMesa;
+		return mostrarMesa.toString();
 	}
+
 	public String mostrarTurnosString() {
-		String mostrarTurno = "";	
+		String mostrarTurno = "";
 		for (Integer dni : tieneTurno.keySet()) {
-			if(registroVotantes.contains(dni)) {
-				mostrarTurno = mostrarTurno + " - " + dni + ". Numero de mesa: " + tieneTurno.get(dni).get_mesa()._numeroMesa + ". Franja horaria: " + tieneTurno.get(dni).get_horario() + ". Ya votó\n"; 
-			}else {
-				mostrarTurno = mostrarTurno + " - " + dni + ". Numero de mesa: " + tieneTurno.get(dni).get_mesa()._numeroMesa + ". Franja horaria: " + tieneTurno.get(dni).get_horario() + ". No votó\n";
+			if (registroVotantes.contains(dni)) {
+				mostrarTurno = mostrarTurno + " - " + dni + ". Numero de mesa: "
+						+ tieneTurno.get(dni).get_mesa()._numeroMesa + ". Franja horaria: "
+						+ tieneTurno.get(dni).get_horario() + ". Ya votó\n";
+			} else {
+				mostrarTurno = mostrarTurno + " - " + dni + ". Numero de mesa: "
+						+ tieneTurno.get(dni).get_mesa()._numeroMesa + ". Franja horaria: "
+						+ tieneTurno.get(dni).get_horario() + ". No votó\n";
 			}
 		}
 		return mostrarTurno;
 	}
+
 	public String esperaTurnoString() {
-		String esperaTurno = "";
+		StringBuilder esperaTurno = new StringBuilder();
 		for (Integer dni : padron.keySet()) {
 			Persona persona = padron.get(dni);
 			if (!tieneTurno.containsKey(dni)) {
-				esperaTurno = esperaTurno + " " + persona.get_dni();
-				}
+				esperaTurno.append(' ');
+				esperaTurno.append(persona.get_dni());
 			}
-		return esperaTurno;
-		
+		}
+		if (esperaTurno.length() == 0) {
+			esperaTurno.append("No hay registro de personas sin turno");
+		}
+		return esperaTurno.toString();
+
 	}
-	
 
 	public Integer mesaTrabajadores() {
 		for (Integer numeroMesa : mesas.keySet()) {

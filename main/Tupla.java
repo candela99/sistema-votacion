@@ -8,9 +8,10 @@ public class Tupla<X, Y> {
 		this.x = x;
 		this.y = y;
 	}
-	
-	public String toStringTupla() {
-		return "Tupla: " + x + " " + y;
+
+	@Override
+	public String toString() {
+		return "Numero de mesa: " + x + " , Horario asignado: " + y;
 	}
 
 	public X getX() {

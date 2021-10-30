@@ -2,31 +2,33 @@ package main;
 
 import java.util.*;
 
-public class Franja { //8hs, 9hs, 10hs...
+public class Franja { 
 	private Set<Integer> _franja;
-	//modela un HashSet de personas en cada franja horario, mostrando cual persona va en cada una
-	
-	public Franja(){
+
+	public Franja() {
 		_franja = new HashSet<>();
 	}
-	
-	public String toStringFranja() {
-		String personarPorFranjaString = "";
+
+	@Override
+	public String toString() {
+		StringBuilder personarPorFranja = new StringBuilder("Dnis asignados: ");
 		for (Integer dni : _franja) {
-			personarPorFranjaString = personarPorFranjaString  + dni + " "; 
+			personarPorFranja.append(dni);
+			personarPorFranja.append(' ');
 		}
-		return "Franja: " + personarPorFranjaString;
+		return personarPorFranja.toString();
 	}
-	
+
 	void agregarPersona(Integer dniPersona) {
 		_franja.add(dniPersona);
 	}
-	
-	public Set<Integer> getFranja(){
+
+	public Set<Integer> getFranja() {
 		return _franja;
 	}
-	
+
 	public Integer cantDePersonas() {
 		return _franja.size();
 	}
+
 }

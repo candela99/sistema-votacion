@@ -16,10 +16,11 @@ abstract public class Mesa {
 		_cantVotantesPorMesa = 0;
 	}
 
-	public String toStringMesa() {
-		return "Nombre de la mesa: " + _nombreMesa + " presidente de mesa: " + _presidenteMesa;
+	@Override
+	public String toString() {
+		return "Nombre de la mesa: " + _nombreMesa + " Presidente de mesa: " + _presidenteMesa;
 	}
-	
+
 	public Integer votantesPorMesa() {
 		for (Franja f : _franjas.values()) {
 			_cantVotantesPorMesa += f.cantDePersonas();
@@ -48,8 +49,10 @@ abstract public class Mesa {
 		}
 	}
 
-	// dado un dni, me fijo si la mesa que le corresponde segun sus condiciones
-	// tiene turnos disponibles
+	/*
+	 * dado un dni, me fijo si la mesa que le corresponde segun sus condiciones
+	 * tiene turnos disponibles
+	 */
 	public Turno agregarPersonaAFranja(Integer dni) {
 		Boolean tieneTurnosDisponibles = buscarTurnoLibre().getX();
 		Integer horario = buscarTurnoLibre().getY();
@@ -65,13 +68,15 @@ abstract public class Mesa {
 		return _turnoPresidente;
 	}
 
-//	abstract Boolean tieneTurnosDisponibles();
-
 	public Boolean sinTurnosAsignados() {
 		return _franjas.keySet().size() == 0;
 	}
 
-	abstract Tupla<Boolean, Integer> buscarTurnoLibre(); // devuelve el horario con turnos libres
+	/*
+	 * devuelve true en el parametro x si hay turnos disponibles y el horario
+	 * correspondiente, en caso contrario devuelve false y 0
+	 */
+	abstract Tupla<Boolean, Integer> buscarTurnoLibre();
 
 	@Override
 	public int hashCode() {
@@ -85,10 +90,7 @@ abstract public class Mesa {
 	}
 
 	public static class MesaMayores extends Mesa {
-		// modela la mesa para las personas mayores de 65años, heredando los atributos
-		// de la clase Mesa.
 		public MesaMayores(String nombreMesa, Integer presidenteMesa) {
-			// 8 <= franjas.keys <= 18
 			super(nombreMesa, presidenteMesa);
 			_numeroMesa = 7000;
 			_franjas = new HashMap<>();
@@ -107,10 +109,7 @@ abstract public class Mesa {
 	}
 
 	public static class MesaEnfPreexistentes extends Mesa {
-		// modela la mesa para las personas con enfermedades preexistentes, heredando
-		// los atributos de la clase Mesa.
 		public MesaEnfPreexistentes(String nombreMesa, Integer presidenteMesa) {
-			// 8 <= franjas.keys <= 18
 			super(nombreMesa, presidenteMesa);
 			_numeroMesa = 7001;
 			_franjas = new HashMap<>();
@@ -129,10 +128,7 @@ abstract public class Mesa {
 	}
 
 	public static class MesaTrabajadores extends Mesa {
-		// modela la mesa para las personas que trabaja el dia de la votacion, heredando
-		// los atributos de la clase Mesa.
 		public MesaTrabajadores(String nombreMesa, Integer presidenteMesa) {
-			// franjas.keySet == 1 (que va de 8 a 12)
 			super(nombreMesa, presidenteMesa);
 			_numeroMesa = 7002;
 			_franjas = new HashMap<>();
@@ -146,10 +142,7 @@ abstract public class Mesa {
 	}
 
 	public static class MesaGeneral extends Mesa {
-		// modela la mesa para las personas que no entran en ningun grupo, heredando los
-		// atributos de la clase Mesa.
 		public MesaGeneral(String nombreMesa, Integer presidenteMesa) {
-			// 8 <= franjas.keys <= 18
 			super(nombreMesa, presidenteMesa);
 			_numeroMesa = 7003;
 			_franjas = new HashMap<>();
